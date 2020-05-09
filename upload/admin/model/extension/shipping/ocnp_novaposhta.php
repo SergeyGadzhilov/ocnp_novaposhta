@@ -4,8 +4,8 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    public function getCitiesFromApi()
    {
       $request = array(
-         "modelName" => $modelName,
-         "calledMethod" => $calledMethod,
+         "modelName" => 'Address',
+         "calledMethod" => "getCities",
          "methodProperties" => array()
       );
 

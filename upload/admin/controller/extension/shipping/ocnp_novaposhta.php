@@ -2,11 +2,12 @@
 
 class ControllerExtensionShippingOcnpNovaposhta extends Controller
 {
+   const EXTENSION_NAME = 'extension/shipping/ocnp_novaposhta';
    private $m_data = array();
 
    private function loadResources()
    {
-      $this->load->language('shipping/ocnp_novaposhta');
+      $this->load->language(self::EXTENSION_NAME);
       $this->document->setTitle($this->language->get('heading_title'));
       $this->m_data['heading_title'] = $this->language->get('heading_title');
       $this->m_data['text_edit'] = $this->language->get('text_edit');
@@ -41,7 +42,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       );
 
       $this->document->breadcrumbs[] = array(
-         'href' => $this->getLink('shipping/ocnp_novaposhta'),
+         'href' => $this->getLink(self::EXTENSION_NAME),
          'text' => $this->language->get('heading_title'),
          'separator' => ' :: '
       );
@@ -90,17 +91,17 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       {
          $this->setBreadcrumbs();
          $this->loadSettings();
-         $this->m_data['action'] = $this->getLink('shipping/ocnp_novaposhta');
+         $this->m_data['action'] = $this->getLink(self::EXTENSION_NAME);
          $this->m_data['cancel'] = $this->getLink('extension/shipping');
 
-         $this->load->model('shipping/ocnp_novaposhta');
-         $this->m_data['cities'] = $this->model_localisation_novaposhta->getCitiesFromApi();
+         $this->load->model(self::EXTENSION_NAME);
+         $this->m_data['cities'] = $this->model_extension_shipping_ocnp_novaposhta->getCitiesFromApi();
 
          $this->m_data['header'] = $this->load->controller('common/header');
          $this->m_data['column_left'] = $this->load->controller('common/column_left');
          $this->m_data['footer'] = $this->load->controller('common/footer');
 
-         $this->response->setOutput($this->load->view('shipping/ocnp_novaposhta', $this->m_data));
+         $this->response->setOutput($this->load->view(self::EXTENSION_NAME, $this->m_data));
       }
    }
 
@@ -108,7 +109,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    {
       $IsValid = true;
 
-      if (!$this->user->hasPermission('modify', 'shipping/ocnp_novaposhta'))
+      if (!$this->user->hasPermission('modify', self::EXTENSION_NAME))
       {
          $this->m_data['warning'] = $this->language->get('error_permission');
          $IsValid = false;
