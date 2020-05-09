@@ -14,11 +14,11 @@ class ControllerShippingOcnpNovaposhta extends Controller
       $this->m_data['text_disabled'] = $this->language->get('text_disabled');
       $this->m_data['text_select'] = $this->language->get('text_select');
       $this->m_data['entry_status'] = $this->language->get('entry_status');
-      $this->m_data['entry_api_url'] = $this->language->get('entry_api_url');
-      $this->m_data['entry_api_key'] = $this->language->get('entry_api_key');
-      $this->m_data['entry_city_from'] = $this->language->get('entry_city_from');
-      $this->m_data['entry_sort_order'] = $this->language->get('entry_sort_order');
-      $this->m_data['entry_min_total_for_free_delivery'] = $this->language->get('entry_min_total_for_free_delivery');
+      $this->m_data['ocnp_entry_api_url'] = $this->language->get('entry_api_url');
+      $this->m_data['ocnp_entry_api_key'] = $this->language->get('entry_api_key');
+      $this->m_data['ocnp_entry_city_from'] = $this->language->get('entry_city_from');
+      $this->m_data['ocnp_entry_sort_order'] = $this->language->get('entry_sort_order');
+      $this->m_data['ocnp_entry_min_total_for_free_delivery'] = $this->language->get('entry_min_total_for_free_delivery');
       $this->m_data['button_save'] = $this->language->get('button_save');
       $this->m_data['button_cancel'] = $this->language->get('button_cancel');
       $this->m_data['admin_language_id'] = $this->config->get('config_admin_language');
@@ -95,7 +95,7 @@ class ControllerShippingOcnpNovaposhta extends Controller
          $this->m_data['column_left'] = $this->load->controller('common/column_left');
          $this->m_data['footer'] = $this->load->controller('common/footer');
 
-         $this->response->setOutput($this->load->view('shipping/ocnp_novaposhta.tpl', $this->m_data));
+         $this->response->setOutput($this->load->view('shipping/ocnp_novaposhta', $this->m_data));
       }
    }
 
@@ -108,21 +108,23 @@ class ControllerShippingOcnpNovaposhta extends Controller
          $this->m_data['warning'] = $this->language->get('error_permission');
          $IsValid = false;
       }
-
-      $RequiredFields = array(
-         'ocnp_novaposhta_min_total_for_free_delivery',
-         'ocnp_novaposhta_api_url',
-         'ocnp_novaposhta_api_key',
-         'ocnp_novaposhta_city_from'
-      );
-
-      foreach($RequiredFields as $field)
+      else
       {
-         if (!$this->request->post[$field])
+         $RequiredFields = array(
+            'ocnp_novaposhta_min_total_for_free_delivery',
+            'ocnp_novaposhta_api_url',
+            'ocnp_novaposhta_api_key',
+            'ocnp_novaposhta_city_from'
+         );
+   
+         foreach($RequiredFields as $field)
          {
-            $error = 'error_'.$field;
-            $this->m_data[$error] = $this->language->get($error);
-            $IsValid = false;
+            if (!$this->request->post[$field])
+            {
+               $error = 'error_'.$field;
+               $this->m_data[$error] = $this->language->get($error);
+               $IsValid = false;
+            }
          }
       }
 

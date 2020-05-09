@@ -1,0 +1,104 @@
+{{header}}
+{{column_left}}
+<div id="content">
+   <div class="page-header">
+      <div class="container-fluid">
+         <div class="pull-right">
+            <button type="submit" form="form" data-toggle="tooltip" title="<?php echo $button_save; ?>" class="btn btn-primary"><i class="fa fa-save"></i></button>
+            <a href="<?php echo $cancel; ?>" data-toggle="tooltip" title="<?php echo $button_cancel; ?>" class="btn btn-default"><i class="fa fa-reply"></i></a>
+         </div>
+         <h1>{{heading_title}}</h1>
+      </div>
+   </div>
+   <div class="container-fluid">
+      {% if error_warning %} 
+      <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> 
+         {{error_warning}}
+         <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>
+      {% endif %}
+      <div class="panel panel-default">
+         <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-pencil"></i>{{text_edit}}</h3>
+         </div>
+         <div class="panel-body">
+            <form action="{{action}}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-field">{{entry_status}}</label>
+                  <div class="col-sm-10">
+                     <select class="form-control" name="ocnp_novaposhta_status">
+                        {% if ocnp_novaposhta_status %}
+                        <option value="1" selected="selected">{{$text_enabled}}</option>
+                        <option value="0">{{text_disabled}}</option>
+                        {% else %}
+                        <option value="1">{{text_enabled}}</option>
+                        <option value="0" selected="selected">{{text_disabled}}</option>
+                        {% endif %}
+                     </select>
+                  </div>
+               </div>
+               <div class="form-group required">
+                  <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_min_total_for_free_delivery}}</label>
+                  <div class="col-sm-10">
+                     <input class="form-control" type="text" name="ocnp_novaposhta_min_total_for_free_delivery" value="{{ocnp_novaposhta_min_total_for_free_delivery}}" />
+                     {% if error_ocnp_novaposhta_min_total_for_free_delivery %}
+                     <div class="text-danger">{{error_ocnp_novaposhta_min_total_for_free_delivery}}</div>
+                     {% endif %}
+                  </div>
+               </div>
+               <div class="form-group required">
+                  <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_api_url}}</label>
+                  <div class="col-sm-10">
+                     <input class="form-control" type="text" name="ocnp_novaposhta_api_url" value="{{ocnp_novaposhta_api_url}}" />
+                     {% if error_ocnp_novaposhta_api_url %}
+                     <div class="text-danger">{{error_ocnp_novaposhta_api_url}}</div>
+                     {% endif %}
+                  </div>
+               </div>
+               <div class="form-group required">
+                  <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_api_key}}</label>
+                  <div class="col-sm-10">
+                     <input class="form-control" type="text" name="ocnp_novaposhta_api_key" value="{{ocnp_novaposhta_api_key}}" />
+                     {%if error_ocnp_novaposhta_api_key %}<div class="text-danger">{{error_ocnp_novaposhta_api_key}}</div>{%endif%}
+                  </div>
+               </div>
+               <div class="form-group required">
+                  <label class="col-sm-2 control-label" for="input-field"><?php echo $ocnp_entry_city_from; ?></label>
+                  <div class="col-sm-10">
+                     <select class="form-control" name="ocnp_novaposhta_city_from">
+                        <option value="0">{{text_select}}</option>
+                        <% for city in cities.data %}
+                           {% if city.Ref == ocnp_novaposhta_city_from %}
+                              <option value="{{city.Ref}}" selected="selected"><?php
+                              {% if admin_language_id == 'ua' %}
+                                 {{city.Description}}
+                              {% else %}
+                                 {{city.DescriptionRu}}
+                              {%endif%}
+                              </option>
+                           {% else %}
+                              <option value="{{city.Ref}}"><?php
+                              {% if admin_language_id == 'ua' %}
+                                 {{city.Description}}
+                              {%else %}}
+                                 {{city.DescriptionRu}}
+                            {%elseif%}</option>
+                        {%endfor%}
+                     </select>
+                     {% if ocnp_novaposhta_city_from %}
+                       <div class="text-danger">{{ocnp_novaposhta_city_from}}</div>
+                     {% endif %}
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_sort_order}}</label>
+                  <div class="col-sm-10">
+                     <input class="form-control" type="text" name="ocnp_novaposhta_sort_order" value="{{ocnp_novaposhta_sort_order}}" size="1" />
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+{{footer}}
