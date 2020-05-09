@@ -1,6 +1,6 @@
 <?php
 
-class ModelShippingOcnpNovaposhta extends Model {
+class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    private $m_data = array();
 

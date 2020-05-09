@@ -1,6 +1,6 @@
 <?php
 
-class ControllerShippingOcnpNovaposhta extends Controller
+class ControllerExtensionShippingOcnpNovaposhta extends Controller
 {
    private $m_data = array();
 
@@ -29,19 +29,19 @@ class ControllerShippingOcnpNovaposhta extends Controller
       $this->document->breadcrumbs = array();
 
       $this->document->breadcrumbs[] = array(
-         'href' => HTTPS_SERVER . 'index.php?route=common/home&token=' . $this->session->data['token'],
+         'href' => $this->getLink('common/home'),
          'text' => $this->language->get('text_home'),
          'separator' => FALSE
       );
 
       $this->document->breadcrumbs[] = array(
-         'href' => HTTPS_SERVER . 'index.php?route=extension/shipping&token=' . $this->session->data['token'],
+         'href' => $this->getLink('extension/shipping'),
          'text' => $this->language->get('text_shipping'),
          'separator' => ' :: '
       );
 
       $this->document->breadcrumbs[] = array(
-         'href' => HTTPS_SERVER . 'index.php?route=shipping/ocnp_novaposhta&token=' . $this->session->data['token'],
+         'href' => $this->getLink('shipping/ocnp_novaposhta'),
          'text' => $this->language->get('heading_title'),
          'separator' => ' :: '
       );
@@ -71,6 +71,11 @@ class ControllerShippingOcnpNovaposhta extends Controller
       }
    }
 
+   private function getLink($route)
+   {
+      return HTTPS_SERVER."index.php?route=".$route."&user_token=".$this->session->data['user_token'];
+   }
+
    public function index()
    {
       $this->loadResources();
@@ -79,14 +84,14 @@ class ControllerShippingOcnpNovaposhta extends Controller
          $this->load->model('setting/setting');
          $this->model_setting_setting->editSetting('ocnp_novaposhta', $this->request->post);
          $this->session->data['success'] = $this->language->get('text_success');
-         $this->response->redirect(HTTPS_SERVER . 'index.php?route=extension/shipping&token=' . $this->session->data['token']);
+         $this->response->redirect($this->getLink('extension/shipping'));
       }
       else
       {
          $this->setBreadcrumbs();
          $this->loadSettings();
-         $this->m_data['action'] = HTTPS_SERVER . 'index.php?route=shipping/novaposhta&token=' . $this->session->data['token'];
-         $this->m_data['cancel'] = HTTPS_SERVER . 'index.php?route=extension/shipping&token=' . $this->session->data['token'];
+         $this->m_data['action'] = $this->getLink('shipping/ocnp_novaposhta');
+         $this->m_data['cancel'] = $this->getLink('extension/shipping');
 
          $this->load->model('shipping/ocnp_novaposhta');
          $this->m_data['cities'] = $this->model_localisation_novaposhta->getCitiesFromApi();

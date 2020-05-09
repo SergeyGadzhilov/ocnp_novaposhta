@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationOcnpNovaposhta extends Model {
+class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function getCitiesFromApi()
    {
