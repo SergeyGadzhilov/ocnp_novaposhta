@@ -36,7 +36,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       );
 
       $this->document->breadcrumbs[] = array(
-         'href' => $this->getLink('extension/shipping'),
+         'href' => $this->getLink('marketplace/extension'),
          'text' => $this->language->get('text_shipping'),
          'separator' => ' :: '
       );
@@ -51,24 +51,28 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    private function loadSettings()
    {
       $settings = array(
-         'ocnp_novaposhta_min_total_for_free_delivery',
-         'ocnp_novaposhta_status',
-         'ocnp_novaposhta_api_url',
-         'ocnp_novaposhta_api_key',
-         'ocnp_novaposhta_city_from',
-         'ocnp_novaposhta_sort_order'
+         'ocnp_novaposhta_min_total_for_free_delivery' => '0',
+         'ocnp_novaposhta_status' => '',
+         'ocnp_novaposhta_api_url' => 'https://api.novaposhta.ua/v2.0/json/',
+         'ocnp_novaposhta_api_key' => '',
+         'ocnp_novaposhta_city_from' => '',
+         'ocnp_novaposhta_sort_order' => '0'
       );
 
-      foreach($settings as $setting)
+      foreach($settings as $setting => $defaultValue)
       {
+         $value = $this->config->get($setting);
          if (isset($this->request->post[$setting]))
          {
             $this->m_data[$setting] = $this->request->post[$setting];
          }
-         else
+
+         if (empty($value))
          {
-            $this->m_data[$setting] = $this->config->get($setting);
+            $value = $defaultValue;
          }
+
+         $this->m_data[$setting] = $value;
       }
    }
 
@@ -85,14 +89,14 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          $this->load->model('setting/setting');
          $this->model_setting_setting->editSetting('ocnp_novaposhta', $this->request->post);
          $this->session->data['success'] = $this->language->get('text_success');
-         $this->response->redirect($this->getLink('extension/shipping'));
+         $this->response->redirect($this->getLink('marketplace/extension'));
       }
       else
       {
          $this->setBreadcrumbs();
          $this->loadSettings();
          $this->m_data['action'] = $this->getLink(self::EXTENSION_NAME);
-         $this->m_data['cancel'] = $this->getLink('extension/shipping');
+         $this->m_data['cancel'] = $this->getLink('marketplace/extension');
 
          $this->load->model(self::EXTENSION_NAME);
          $this->m_data['cities'] = $this->model_extension_shipping_ocnp_novaposhta->getCitiesFromApi();
