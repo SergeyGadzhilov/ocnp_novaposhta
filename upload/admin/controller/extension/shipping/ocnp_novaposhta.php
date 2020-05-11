@@ -23,6 +23,8 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $this->m_data['button_save'] = $this->language->get('button_save');
       $this->m_data['button_cancel'] = $this->language->get('button_cancel');
       $this->m_data['admin_language_id'] = $this->config->get('config_admin_language');
+      $this->m_data['ocnp_text_main_settings'] = $this->config->get('ocnp_text_main_settings');
+      $this->m_data['ocnp_text_api_settings'] = $this->config->get('ocnp_text_api_settings');
    }
 
    private function setBreadcrumbs()
@@ -126,7 +128,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
             'ocnp_novaposhta_api_key',
             'ocnp_novaposhta_city_from'
          );
-   
+
          foreach($RequiredFields as $field)
          {
             if (!$this->request->post[$field])
