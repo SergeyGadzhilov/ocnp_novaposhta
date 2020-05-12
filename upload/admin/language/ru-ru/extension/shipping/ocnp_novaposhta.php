@@ -6,6 +6,7 @@ $_['text_success']     = 'Настройки модуля обновлены!';
 $_['text_edit']        = 'Изменить доставку Новой Почтой';
 $_['ocnp_text_main_settings'] = 'Главное';
 $_['ocnp_text_api_settings'] = 'API';
+$_['ocnp_text_sender'] = 'Отправитель';
 $_['entry_status']     = 'Статус:';
 $_['entry_sort_order'] = 'Порядок сортировки:';
 $_['entry_api_url']    = 'URL-адрес API';

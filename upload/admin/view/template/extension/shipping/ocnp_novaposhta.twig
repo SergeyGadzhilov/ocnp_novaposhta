@@ -30,6 +30,9 @@
                   <li class="nav-item">
                      <a class="nav-link" data-toggle="tab" href="#ocnp_api_settings">{{ocnp_text_api_settings}}</a>
                   </li>
+                  <li class="nav-item">
+                     <a class="nav-link" data-toggle="tab" href="#ocnp_sender">{{ocnp_text_sender}}</a>
+                  </li>
                </ul>
                <div class="tab-content">
                   <div class="tab-pane fade active in" id="ocnp_main_settings">
@@ -56,6 +59,32 @@
                            {% endif %}
                         </div>
                      </div>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_sort_order}}</label>
+                        <div class="col-sm-10">
+                           <input class="form-control" type="text" name="ocnp_novaposhta_sort_order" value="{{ocnp_novaposhta_sort_order}}" size="1" />
+                        </div>
+                     </div>
+                  </div>
+                  <div class="tab-pane fade" id="ocnp_api_settings">
+                     <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_api_url}}</label>
+                        <div class="col-sm-10">
+                           <input class="form-control" type="text" name="ocnp_novaposhta_api_url" value="{{ocnp_novaposhta_api_url}}" />
+                           {% if error_ocnp_novaposhta_api_url %}
+                           <div class="text-danger">{{error_ocnp_novaposhta_api_url}}</div>
+                           {% endif %}
+                        </div>
+                     </div>
+                     <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_api_key}}</label>
+                        <div class="col-sm-10">
+                           <input class="form-control" type="text" name="ocnp_novaposhta_api_key" value="{{ocnp_novaposhta_api_key}}" />
+                           {% if error_ocnp_novaposhta_api_key %}<div class="text-danger">{{error_ocnp_novaposhta_api_key}}</div>{% endif %}
+                        </div>
+                     </div>
+                  </div>
+                  <div class="tab-pane fade" id="ocnp_sender">
                      <div class="form-group required">
                         <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_city_from}}</label>
                         <div class="col-sm-10">
@@ -84,30 +113,6 @@
                            {% if ocnp_novaposhta_city_from %}
                            <div class="text-danger">{{ocnp_novaposhta_city_from}}</div>
                            {% endif %}
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_sort_order}}</label>
-                        <div class="col-sm-10">
-                           <input class="form-control" type="text" name="ocnp_novaposhta_sort_order" value="{{ocnp_novaposhta_sort_order}}" size="1" />
-                        </div>
-                     </div>
-                  </div>
-                  <div class="tab-pane fade" id="ocnp_api_settings">
-                     <div class="form-group required">
-                        <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_api_url}}</label>
-                        <div class="col-sm-10">
-                           <input class="form-control" type="text" name="ocnp_novaposhta_api_url" value="{{ocnp_novaposhta_api_url}}" />
-                           {% if error_ocnp_novaposhta_api_url %}
-                           <div class="text-danger">{{error_ocnp_novaposhta_api_url}}</div>
-                           {% endif %}
-                        </div>
-                     </div>
-                     <div class="form-group required">
-                        <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_api_key}}</label>
-                        <div class="col-sm-10">
-                           <input class="form-control" type="text" name="ocnp_novaposhta_api_key" value="{{ocnp_novaposhta_api_key}}" />
-                           {% if error_ocnp_novaposhta_api_key %}<div class="text-danger">{{error_ocnp_novaposhta_api_key}}</div>{% endif %}
                         </div>
                      </div>
                   </div>

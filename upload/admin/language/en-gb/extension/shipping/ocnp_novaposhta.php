@@ -6,6 +6,7 @@ $_['text_success']     = 'Success: You have modified attributes!';
 $_['text_edit']        = 'Edit delivery Nova Poshta';
 $_['ocnp_text_main_settings'] = 'Main';
 $_['ocnp_text_api_settings'] = 'API';
+$_['ocnp_text_sender'] = 'Sender';
 $_['entry_status']     = 'Status:';
 $_['entry_sort_order'] = 'Sort Order:';
 $_['entry_api_url']    = 'API URL';

@@ -66,7 +66,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          $value = $this->config->get($setting);
          if (isset($this->request->post[$setting]))
          {
-            $this->m_data[$setting] = $this->request->post[$setting];
+            $value = $this->request->post[$setting];
          }
 
          if (empty($value))
@@ -86,7 +86,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    public function index()
    {
       $this->loadResources();
-      if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate()))
+      if ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->validate())
       {
          $this->load->model('setting/setting');
          $this->model_setting_setting->editSetting('ocnp_novaposhta', $this->request->post);
@@ -123,10 +123,8 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       else
       {
          $RequiredFields = array(
-            'ocnp_novaposhta_min_total_for_free_delivery',
             'ocnp_novaposhta_api_url',
-            'ocnp_novaposhta_api_key',
-            'ocnp_novaposhta_city_from'
+            'ocnp_novaposhta_api_key'
          );
 
          foreach($RequiredFields as $field)
