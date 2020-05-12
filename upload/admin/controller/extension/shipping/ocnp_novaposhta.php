@@ -2,12 +2,13 @@
 
 class ControllerExtensionShippingOcnpNovaposhta extends Controller
 {
-   const EXTENSION_NAME = 'extension/shipping/ocnp_novaposhta';
+   const EXTENSION_NAME = 'shipping_ocnp_novaposhta';
+   const EXTENSION_PATH = 'extension/shipping/ocnp_novaposhta';
    private $m_data = array();
 
    private function loadResources()
    {
-      $this->load->language(self::EXTENSION_NAME);
+      $this->load->language(self::EXTENSION_PATH);
       $this->document->setTitle($this->language->get('heading_title'));
       $this->m_data['heading_title'] = $this->language->get('heading_title');
       $this->m_data['text_edit'] = $this->language->get('text_edit');
@@ -44,21 +45,26 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       );
 
       $this->document->breadcrumbs[] = array(
-         'href' => $this->getLink(self::EXTENSION_NAME),
+         'href' => $this->getLink(self::EXTENSION_PATH),
          'text' => $this->language->get('heading_title'),
          'separator' => ' :: '
       );
    }
 
+   private function settingName($setting)
+   {
+      return self::EXTENSION_NAME.'_'.$setting;
+   }
+
    private function loadSettings()
    {
       $settings = array(
-         'ocnp_novaposhta_min_total_for_free_delivery' => '0',
-         'ocnp_novaposhta_status' => '',
-         'ocnp_novaposhta_api_url' => 'https://api.novaposhta.ua/v2.0/json/',
-         'ocnp_novaposhta_api_key' => '',
-         'ocnp_novaposhta_city_from' => '',
-         'ocnp_novaposhta_sort_order' => '0'
+         $this->settingName('min_total_for_free_delivery') => '0',
+         $this->settingName('status') => '0',
+         $this->settingName('api_url') => 'https://api.novaposhta.ua/v2.0/json/',
+         $this->settingName('api_key') => '',
+         $this->settingName('city_from') => '',
+         $this->settingName('sort_order') => '0'
       );
 
       foreach($settings as $setting => $defaultValue)
@@ -89,7 +95,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       if ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->validate())
       {
          $this->load->model('setting/setting');
-         $this->model_setting_setting->editSetting('ocnp_novaposhta', $this->request->post);
+         $this->model_setting_setting->editSetting(self::EXTENSION_NAME, $this->request->post);
          $this->session->data['success'] = $this->language->get('text_success');
          $this->response->redirect($this->getLink('marketplace/extension'));
       }
@@ -97,17 +103,17 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       {
          $this->setBreadcrumbs();
          $this->loadSettings();
-         $this->m_data['action'] = $this->getLink(self::EXTENSION_NAME);
+         $this->m_data['action'] = $this->getLink(self::EXTENSION_PATH);
          $this->m_data['cancel'] = $this->getLink('marketplace/extension');
 
-         $this->load->model(self::EXTENSION_NAME);
+         $this->load->model(self::EXTENSION_PATH);
          $this->m_data['cities'] = $this->model_extension_shipping_ocnp_novaposhta->getCitiesFromApi();
 
          $this->m_data['header'] = $this->load->controller('common/header');
          $this->m_data['column_left'] = $this->load->controller('common/column_left');
          $this->m_data['footer'] = $this->load->controller('common/footer');
 
-         $this->response->setOutput($this->load->view(self::EXTENSION_NAME, $this->m_data));
+         $this->response->setOutput($this->load->view(self::EXTENSION_PATH, $this->m_data));
       }
    }
 
@@ -115,7 +121,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    {
       $IsValid = true;
 
-      if (!$this->user->hasPermission('modify', self::EXTENSION_NAME))
+      if (!$this->user->hasPermission('modify', self::EXTENSION_PATH))
       {
          $this->m_data['warning'] = $this->language->get('error_permission');
          $IsValid = false;
@@ -123,8 +129,8 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       else
       {
          $RequiredFields = array(
-            'ocnp_novaposhta_api_url',
-            'ocnp_novaposhta_api_key'
+            $this->settingName('api_url'),
+            $this->settingName('api_key')
          );
 
          foreach($RequiredFields as $field)

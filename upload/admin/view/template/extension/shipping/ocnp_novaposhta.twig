@@ -39,8 +39,8 @@
                      <div class="form-group">
                         <label class="col-sm-2 control-label" for="input-field">{{entry_status}}</label>
                         <div class="col-sm-10">
-                           <select class="form-control" name="ocnp_novaposhta_status">
-                              {% if ocnp_novaposhta_status %}
+                           <select class="form-control" name="shipping_ocnp_novaposhta_status">
+                              {% if shipping_ocnp_novaposhta_status %}
                               <option value="1" selected="selected">{{text_enabled}}</option>
                               <option value="0">{{text_disabled}}</option>
                               {% else %}
@@ -53,16 +53,16 @@
                      <div class="form-group required">
                         <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_min_total_for_free_delivery}}</label>
                         <div class="col-sm-10">
-                           <input class="form-control" type="text" name="ocnp_novaposhta_min_total_for_free_delivery" value="{{ocnp_novaposhta_min_total_for_free_delivery}}" />
-                           {% if error_ocnp_novaposhta_min_total_for_free_delivery %}
-                           <div class="text-danger">{{error_ocnp_novaposhta_min_total_for_free_delivery}}</div>
+                           <input class="form-control" type="text" name="shipping_ocnp_novaposhta_min_total_for_free_delivery" value="{{shipping_ocnp_novaposhta_min_total_for_free_delivery}}" />
+                           {% if error_shipping_ocnp_novaposhta_min_total_for_free_delivery %}
+                           <div class="text-danger">{{error_shipping_ocnp_novaposhta_min_total_for_free_delivery}}</div>
                            {% endif %}
                         </div>
                      </div>
                      <div class="form-group">
                         <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_sort_order}}</label>
                         <div class="col-sm-10">
-                           <input class="form-control" type="text" name="ocnp_novaposhta_sort_order" value="{{ocnp_novaposhta_sort_order}}" size="1" />
+                           <input class="form-control" type="text" name="shipping_ocnp_novaposhta_sort_order" value="{{shipping_ocnp_novaposhta_sort_order}}" size="1" />
                         </div>
                      </div>
                   </div>
@@ -70,17 +70,17 @@
                      <div class="form-group required">
                         <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_api_url}}</label>
                         <div class="col-sm-10">
-                           <input class="form-control" type="text" name="ocnp_novaposhta_api_url" value="{{ocnp_novaposhta_api_url}}" />
-                           {% if error_ocnp_novaposhta_api_url %}
-                           <div class="text-danger">{{error_ocnp_novaposhta_api_url}}</div>
+                           <input class="form-control" type="text" name="shipping_ocnp_novaposhta_api_url" value="{{shipping_ocnp_novaposhta_api_url}}" />
+                           {% if error_shipping_ocnp_novaposhta_api_url %}
+                           <div class="text-danger">{{error_shipping_ocnp_novaposhta_api_url}}</div>
                            {% endif %}
                         </div>
                      </div>
                      <div class="form-group required">
                         <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_api_key}}</label>
                         <div class="col-sm-10">
-                           <input class="form-control" type="text" name="ocnp_novaposhta_api_key" value="{{ocnp_novaposhta_api_key}}" />
-                           {% if error_ocnp_novaposhta_api_key %}<div class="text-danger">{{error_ocnp_novaposhta_api_key}}</div>{% endif %}
+                           <input class="form-control" type="text" name="shipping_ocnp_novaposhta_api_key" value="{{shipping_ocnp_novaposhta_api_key}}" />
+                           {% if error_shipping_ocnp_novaposhta_api_key %}<div class="text-danger">{{error_shipping_ocnp_novaposhta_api_key}}</div>{% endif %}
                         </div>
                      </div>
                   </div>
@@ -88,10 +88,10 @@
                      <div class="form-group required">
                         <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_city_from}}</label>
                         <div class="col-sm-10">
-                           <select class="form-control" name="ocnp_novaposhta_city_from">
+                           <select class="form-control" name="shipping_ocnp_novaposhta_city_from">
                               <option value="0">{{text_select}}</option>
                               {% for city in cities.data %}
-                                 {% if city.Ref == ocnp_novaposhta_city_from %}
+                                 {% if city.Ref == shipping_ocnp_novaposhta_city_from %}
                                     <option value="{{city.Ref}}" selected="selected">
                                     {% if admin_language_id == ua %}
                                        {{city.Description}}
@@ -110,8 +110,8 @@
                                  </option>
                               {% endfor %}
                            </select>
-                           {% if ocnp_novaposhta_city_from %}
-                           <div class="text-danger">{{ocnp_novaposhta_city_from}}</div>
+                           {% if shipping_ocnp_novaposhta_city_from %}
+                           <div class="text-danger">{{shipping_ocnp_novaposhta_city_from}}</div>
                            {% endif %}
                         </div>
                      </div>
