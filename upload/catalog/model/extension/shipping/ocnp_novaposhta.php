@@ -2,33 +2,31 @@
 
 class ModelExtensionShippingOcnpNovaposhta extends Model {
 
+   const MODULE_NAME = 'shipping_ocnp_novaposhta';
+   const MODULE_PATH = 'extension/shipping/ocnp_novaposhta';
    private $m_data = array();
-
-   public function __construct()
-   {
-      $this->m_data = array(
-         'code' => 'ocnp_novaposhta',
-         'title' => $this->language->get('text_title'),
-         'sort_order' => $this->config->get('ocnp_novaposhta_sort_order'),
-         'error' => FALSE,
-         'quote' => array()
-      );
-   }
 
    public function getQuote($address)
    {
-      if ($this->config->get('ocnp_novaposhta_status'))
+      if ($this->config->get($this->settingName('status')))
       {
-         $this->load->language('shipping/ocnp_novaposhta');
-         $cost = $this->getCost($address['city']);
-         
+         $this->load->language(self::MODULE_PATH);
+
+         $this->m_data = array(
+            'code' => self::MODULE_NAME,
+            'title' => $this->language->get('text_description'),
+            'sort_order' => $this->config->get($this->settingName('sort_order')),
+            'error' => FALSE,
+            'quote' => array()
+         );
+
          $this->m_data['quote'] = array(
             'warehouse' => array(
                'code' => 'ocnp_novaposhta.warehouse',
                'title' => $this->language->get('text_description'),
-               'cost' => $cost,
+               'cost' => 0,
                'tax_class_id' => 0,
-               'text' => $this->currency->format($cost)
+               'text' => ''
             )
          );
       }
@@ -36,45 +34,18 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       return $this->m_data;
    }
 
-   private function isNotFreeDelivery()
+   private function settingName($setting)
    {
-      $MinFreeTotal = $this->config->get('ocnp_novaposhta_min_total_for_free_delivery');
-      return ($MinFreeTotal < $this->getSubtotal());
-   }
-
-   private function getCost($City)
-   {
-      $Cost = 0;
-
-      if ($this->isNotFreeDelivery())
-      {
-         $CityID = $this->getCityID($City);
-         if ($CityID)
-         {
-            $Cost = $this->getCostFromApi($CityID);
-         }
-      }
-
-      return $Cost;
-   }
-
-   private function getWeight()
-   {
-      return $this->weight->convert($this->cart->getWeight(), $this->config->get('config_weight_class_id'), $this->config->get('auspost_weight_class_id'));
-   }
-
-   private function getSubtotal()
-   {
-      return $this->currency->convert($this->cart->getSubTotal(),'','UAH');
+      return self::MODULE_NAME.'_'.$setting;
    }
 
    private function getApiUrl()
    {
       $url = "https://api.novaposhta.ua/v2.0/json/";
 
-      if ($this->config->get("ocnp_novaposhta_api_url"))
+      if ($this->config->get($this->settingName('api_url')))
       {
-         $url = $this->config->get("ocnp_novaposhta_api_url");
+         $url = $this->config->get($this->settingName('api_url'));
       }
 
       return $url;
@@ -82,7 +53,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    private function sendRequest($request)
    {
-      $request["apiKey"] = $this->config->get('ocnp_novaposhta_api_key');
+      $request["apiKey"] = $this->config->get($this->settingName('api_key'));
 
       $conection = curl_init();
 
@@ -99,56 +70,5 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       curl_close($conection);
 
       return $response;
-   }
-
-   private function getCityID($CityName) 
-   {
-      $response = $this->sendRequest(
-         array(
-            "modelName" => "Address",
-            "calledMethod" => "getCities",
-            "methodProperties" => array(
-               "FindByString" => $city
-            )
-         )
-      );
-
-      if ($response['success'] == 1 && count($response['data']) == 1)
-      {
-         return $response['data'][0]['Ref'];
-      }
-      else
-      {
-         $this->m_data['error'] = $this->language->get('error_get_city');
-         return FALSE;
-      }
-   }
-
-   private function getCostFromApi($city_to)
-   {
-      $response = $this->sendRequest(
-         array(
-            "modelName" => "InternetDocument",
-            "calledMethod" => "getDocumentPrice",
-            "methodProperties" => array(
-               "DateTime" => date("d.m.Y"),
-               "ServiceType" => "WarehouseWarehouse",
-               "Weight" => $this->getWeight(),
-               "Cost" => $this->getSubtotal(),
-               "CitySender" => $this->config->get('ocnp_novaposhta_city_from'),
-               "CityRecipient" => $city_to
-            )
-         )
-      );
-
-      if ($response['success'] == 1 && count($response['data']) == 1)
-      {
-         return $this->currency->convert($response['data'][0]['Cost'],'UAH','');
-      }
-      else
-      {
-         $this->m_data['error'] = $this->language->get('error_get_cost');
-         return FALSE;
-      }
    }
 }
