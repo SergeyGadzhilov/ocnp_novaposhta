@@ -35,9 +35,6 @@
                   <li class="nav-item">
                      <a class="nav-link" data-toggle="tab" href="#ocnp_api_settings">{{ocnp_text_api_settings}}</a>
                   </li>
-                  <li class="nav-item">
-                     <a class="nav-link" data-toggle="tab" href="#ocnp_sender">{{ocnp_text_sender}}</a>
-                  </li>
                </ul>
                <div class="tab-content">
                   <div class="tab-pane fade active in" id="ocnp_main_settings">
@@ -53,15 +50,6 @@
                               <option value="0" selected="selected">{{text_disabled}}</option>
                               {% endif %}
                            </select>
-                        </div>
-                     </div>
-                     <div class="form-group required">
-                        <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_min_total_for_free_delivery}}</label>
-                        <div class="col-sm-10">
-                           <input class="form-control" type="text" name="shipping_ocnp_novaposhta_min_total_for_free_delivery" value="{{shipping_ocnp_novaposhta_min_total_for_free_delivery}}" />
-                           {% if error_shipping_ocnp_novaposhta_min_total_for_free_delivery %}
-                           <div class="text-danger">{{error_shipping_ocnp_novaposhta_min_total_for_free_delivery}}</div>
-                           {% endif %}
                         </div>
                      </div>
                      <div class="form-group">
@@ -86,38 +74,6 @@
                         <div class="col-sm-10">
                            <input class="form-control" type="text" name="shipping_ocnp_novaposhta_api_key" value="{{shipping_ocnp_novaposhta_api_key}}" />
                            {% if error_shipping_ocnp_novaposhta_api_key %}<div class="text-danger">{{error_shipping_ocnp_novaposhta_api_key}}</div>{% endif %}
-                        </div>
-                     </div>
-                  </div>
-                  <div class="tab-pane fade" id="ocnp_sender">
-                     <div class="form-group required">
-                        <label class="col-sm-2 control-label" for="input-field">{{ocnp_entry_city_from}}</label>
-                        <div class="col-sm-10">
-                           <select class="form-control" name="shipping_ocnp_novaposhta_city_from">
-                              <option value="0">{{text_select}}</option>
-                              {% for city in cities.data %}
-                                 {% if city.Ref == shipping_ocnp_novaposhta_city_from %}
-                                    <option value="{{city.Ref}}" selected="selected">
-                                    {% if admin_language_id == ua %}
-                                       {{city.Description}}
-                                    {% else %}
-                                       {{city.DescriptionRu}}
-                                    {% endif %}
-                                    </option>
-                                 {% else %}
-                                    <option value="{{city.Ref}}">
-                                    {% if admin_language_id == 'ua' %}
-                                       {{city.Description}}
-                                    {% else %}}
-                                       {{city.DescriptionRu}}
-                                    {% endif %}
-                                 {% endif %}
-                                 </option>
-                              {% endfor %}
-                           </select>
-                           {% if shipping_ocnp_novaposhta_city_from %}
-                           <div class="text-danger">{{shipping_ocnp_novaposhta_city_from}}</div>
-                           {% endif %}
                         </div>
                      </div>
                   </div>

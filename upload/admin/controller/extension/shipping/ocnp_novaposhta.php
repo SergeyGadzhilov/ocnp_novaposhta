@@ -14,16 +14,12 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $this->m_data['text_edit'] = $this->language->get('text_edit');
       $this->m_data['text_enabled'] = $this->language->get('text_enabled');
       $this->m_data['text_disabled'] = $this->language->get('text_disabled');
-      $this->m_data['text_select'] = $this->language->get('text_select');
       $this->m_data['entry_status'] = $this->language->get('entry_status');
       $this->m_data['ocnp_entry_api_url'] = $this->language->get('entry_api_url');
       $this->m_data['ocnp_entry_api_key'] = $this->language->get('entry_api_key');
-      $this->m_data['ocnp_entry_city_from'] = $this->language->get('entry_city_from');
       $this->m_data['ocnp_entry_sort_order'] = $this->language->get('entry_sort_order');
-      $this->m_data['ocnp_entry_min_total_for_free_delivery'] = $this->language->get('entry_min_total_for_free_delivery');
       $this->m_data['button_save'] = $this->language->get('button_save');
       $this->m_data['button_cancel'] = $this->language->get('button_cancel');
-      $this->m_data['admin_language_id'] = $this->config->get('config_admin_language');
       $this->m_data['ocnp_text_main_settings'] = $this->config->get('ocnp_text_main_settings');
       $this->m_data['ocnp_text_api_settings'] = $this->config->get('ocnp_text_api_settings');
    }
@@ -54,11 +50,9 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    private function loadSettings()
    {
       $settings = array(
-         $this->settingName('min_total_for_free_delivery') => '0',
          $this->settingName('status') => '0',
          $this->settingName('api_url') => 'https://api.novaposhta.ua/v2.0/json/',
          $this->settingName('api_key') => '',
-         $this->settingName('city_from') => '',
          $this->settingName('sort_order') => '0'
       );
 
@@ -100,10 +94,6 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          $this->loadSettings();
          $this->m_data['action'] = $this->getLink(self::EXTENSION_PATH);
          $this->m_data['cancel'] = $this->getLink('marketplace/extension');
-
-         $this->load->model(self::EXTENSION_PATH);
-         $this->m_data['cities'] = $this->model_extension_shipping_ocnp_novaposhta->getCitiesFromApi();
-
          $this->m_data['header'] = $this->load->controller('common/header');
          $this->m_data['column_left'] = $this->load->controller('common/column_left');
          $this->m_data['footer'] = $this->load->controller('common/footer');
@@ -124,16 +114,18 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       else
       {
          $RequiredFields = array(
-            $this->settingName('api_url'),
-            $this->settingName('api_key')
+            'api_url',
+            'api_key'
          );
+
+         var_dump($this->request->post);
 
          foreach($RequiredFields as $field)
          {
-            if (!$this->request->post[$field])
+            $name = $this->settingName($field);
+            if (empty($this->request->post[$name]))
             {
-               $error = 'error_'.$field;
-               $this->m_data[$error] = $this->language->get($error);
+               $this->m_data['error_'.$name] = $this->language->get('error_'.$field);
                $IsValid = false;
             }
          }
