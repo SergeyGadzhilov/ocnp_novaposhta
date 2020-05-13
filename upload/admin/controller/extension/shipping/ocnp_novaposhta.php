@@ -118,8 +118,6 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
             'api_key'
          );
 
-         var_dump($this->request->post);
-
          foreach($RequiredFields as $field)
          {
             $name = $this->settingName($field);
