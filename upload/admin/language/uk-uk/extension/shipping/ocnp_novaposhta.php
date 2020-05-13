@@ -1,7 +1,7 @@
 <?php
 
 $_['heading_title']    = 'Доставка Новою Поштою';
-$_['text_shipping']    = 'Доставка';
+$_['text_extension']   = 'Разширення';
 $_['text_success']     = 'Налаштування модуля поновлено!';
 $_['text_edit']        = 'Змінити доставку Новою Поштою';
 $_['ocnp_text_main_settings'] = 'Головне';

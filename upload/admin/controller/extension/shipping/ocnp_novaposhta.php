@@ -30,24 +30,19 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
 
    private function setBreadcrumbs()
    {
-      $this->document->breadcrumbs = array();
-
-      $this->document->breadcrumbs[] = array(
+      $this->m_data['breadcrumbs'][] = array(
          'href' => $this->getLink('common/home'),
-         'text' => $this->language->get('text_home'),
-         'separator' => FALSE
+         'text' => $this->language->get('text_home')
       );
 
-      $this->document->breadcrumbs[] = array(
+      $this->m_data['breadcrumbs'][] = array(
          'href' => $this->getLink('marketplace/extension'),
-         'text' => $this->language->get('text_shipping'),
-         'separator' => ' :: '
+         'text' => $this->language->get('text_extension')
       );
 
-      $this->document->breadcrumbs[] = array(
+      $this->m_data['breadcrumbs'][] = array(
          'href' => $this->getLink(self::EXTENSION_PATH),
-         'text' => $this->language->get('heading_title'),
-         'separator' => ' :: '
+         'text' => $this->language->get('heading_title')
       );
    }
 

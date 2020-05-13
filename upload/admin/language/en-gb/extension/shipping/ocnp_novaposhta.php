@@ -1,7 +1,7 @@
 <?php
 
 $_['heading_title']    = 'Delivery Nova Poshta';
-$_['text_shipping']    = 'Delivery';
+$_['text_extension']    = 'Extension';
 $_['text_success']     = 'Success: You have modified attributes!';
 $_['text_edit']        = 'Edit delivery Nova Poshta';
 $_['ocnp_text_main_settings'] = 'Main';
