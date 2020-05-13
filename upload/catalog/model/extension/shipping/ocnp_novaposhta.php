@@ -26,12 +26,22 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
                'title' => $this->language->get('text_description'),
                'cost' => 0,
                'tax_class_id' => 0,
-               'text' => ''
+               'text' => '',
+               'form' => $this->getForm()
             )
          );
       }
 
       return $this->m_data;
+   }
+
+   private function getForm()
+   {
+      $data = array(
+         'text_ocnp_city_label' => $this->language->get('text_ocnp_city_label')
+      );
+
+      return $this->load->view(self::MODULE_PATH, $data);
    }
 
    private function settingName($setting)

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <code>OCNPNOVAPOSHTA1.0</code>
+    <name>Parameters form for OCNP Nova Poshta</name>
+    <version>1.0</version>
+    <author>gadzhilov.sergey@gmail.com</author>
+    <file path="catalog/view/theme/*/template/checkout/shipping_method.twig">
+        <operation>
+            <search><![CDATA[
+            {{ quote.title }} - {{ quote.text }}</label>
+            ]]></search>
+            <add position="after"><![CDATA[
+            {% if quote.form is defined %}{{quote.form}}{% endif %}
+            ]]></add>
+        </operation>
+    </file>
+</modification>
