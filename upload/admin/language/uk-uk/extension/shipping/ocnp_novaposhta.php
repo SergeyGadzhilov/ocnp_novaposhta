@@ -1,11 +1,15 @@
 <?php
 
+/* Text */
 $_['heading_title']    = 'Доставка Новою Поштою';
 $_['text_extension']   = 'Разширення';
 $_['text_success']     = 'Налаштування модуля поновлено!';
 $_['text_edit']        = 'Змінити доставку Новою Поштою';
 $_['ocnp_text_main_settings'] = 'Головне';
 $_['ocnp_text_api_settings']  = 'API';
+$_['ocnp_text_sync_settings'] = 'Синхронізація';
+
+/* Entry */
 $_['entry_status']     = 'Статус:';
 $_['entry_sort_order'] = 'Порядок сортування:';
 $_['entry_api_url']    = 'API URL';

@@ -35,6 +35,9 @@
                   <li class="nav-item">
                      <a class="nav-link" data-toggle="tab" href="#ocnp_api_settings">{{ocnp_text_api_settings}}</a>
                   </li>
+                  <li class="nav-item">
+                     <a class="nav-link" data-toggle="tab" href="#ocnp_sync_settings">{{ocnp_text_sync_settings}}</a>
+                  </li>
                </ul>
                <div class="tab-content">
                   <div class="tab-pane fade active in" id="ocnp_main_settings">
@@ -76,6 +79,8 @@
                            {% if error_shipping_ocnp_novaposhta_api_key %}<div class="text-danger">{{error_shipping_ocnp_novaposhta_api_key}}</div>{% endif %}
                         </div>
                      </div>
+                  </div>
+                  <div class="tab-pane fade" id="ocnp_sync_settings">
                   </div>
                </div>
             </form>

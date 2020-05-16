@@ -20,8 +20,6 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $this->m_data['ocnp_entry_sort_order'] = $this->language->get('entry_sort_order');
       $this->m_data['button_save'] = $this->language->get('button_save');
       $this->m_data['button_cancel'] = $this->language->get('button_cancel');
-      $this->m_data['ocnp_text_main_settings'] = $this->config->get('ocnp_text_main_settings');
-      $this->m_data['ocnp_text_api_settings'] = $this->config->get('ocnp_text_api_settings');
    }
 
    private function setBreadcrumbs()
