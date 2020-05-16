@@ -38,10 +38,30 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    private function getForm()
    {
       $data = array(
-         'text_ocnp_city_label' => $this->language->get('text_ocnp_city_label')
+         'text_ocnp_city_label' => $this->language->get('text_ocnp_city_label'),
+         'cities' => $this->getCities()
       );
 
       return $this->load->view(self::MODULE_PATH, $data);
+   }
+
+   private function getCities()
+   {
+      $request = array(
+         "modelName" => "Address",
+         "calledMethod" => "getCities"
+      );
+
+      $response = $this->sendRequest($request);
+
+      $cities = array();
+
+      if ($response['success'])
+      {
+         $cities = $response["data"];
+      }
+
+      return $cities;
    }
 
    private function settingName($setting)
