@@ -6,6 +6,18 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    const EXTENSION_PATH = 'extension/shipping/ocnp_novaposhta';
    private $m_data = array();
 
+   public function install()
+   {
+      $this->load->model(self::EXTENSION_PATH);
+      $this->model_extension_shipping_ocnp_novaposhta->install();
+   }
+
+   public function uninstall()
+   {
+      $this->load->model(self::EXTENSION_PATH);
+      $this->model_extension_shipping_ocnp_novaposhta->uninstall();
+   }
+
    private function loadResources()
    {
       $this->load->language(self::EXTENSION_PATH);

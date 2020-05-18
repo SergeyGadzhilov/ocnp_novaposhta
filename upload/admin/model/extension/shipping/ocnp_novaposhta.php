@@ -44,4 +44,21 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
       return $response;
    }
+
+   public function install()
+   {
+      $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ocnp_novaposhta_cities` (
+         `AA_ID` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+         `Description` VARCHAR(50) NOT NULL,
+         `DescriptionRu` VARCHAR(50) NOT NULL,
+         `Ref` VARCHAR(36) NOT NULL,
+         `Area` INT(11) UNSIGNED,
+         `CityID` INT(11) UNSIGNED
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+   }
+
+   public function uninstall()
+   {
+      $this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ocnp_novaposhta_cities` ;");
+   }
 }
