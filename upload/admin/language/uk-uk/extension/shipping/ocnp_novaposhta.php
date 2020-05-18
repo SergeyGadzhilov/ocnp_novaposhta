@@ -9,6 +9,16 @@ $_['ocnp_text_main_settings'] = 'Головне';
 $_['ocnp_text_api_settings']  = 'API';
 $_['ocnp_text_sync_settings'] = 'Синхронізація';
 
+/* Sync table on Syncronization tab */
+$_['ocnp_text_sync_table_type']  = 'Назва';
+$_['ocnp_text_sync_table_count'] = 'Кількість';
+$_['ocnp_text_sync_table_date']  = 'Останнє оновлення';
+$_['ocnp_text_sync_table_desc']  = 'Опис';
+$_['ocnp_text_sync_table_sync']  = 'Синхронізувати';
+
+$_['ocnp_text_sync_table_cities']  = 'Міста';
+$_['ocnp_text_sync_table_cities_desc']  = 'Оновлення міст, в які можлива доставка поштовою компанією';
+
 /* Entry */
 $_['entry_status']     = 'Статус:';
 $_['entry_sort_order'] = 'Порядок сортування:';

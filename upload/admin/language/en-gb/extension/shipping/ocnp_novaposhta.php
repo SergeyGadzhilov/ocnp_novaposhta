@@ -1,5 +1,6 @@
 <?php
 
+/* Text */
 $_['heading_title']    = 'Delivery Nova Poshta';
 $_['text_extension']    = 'Extension';
 $_['text_success']     = 'Success: You have modified attributes!';
@@ -7,6 +8,18 @@ $_['text_edit']        = 'Edit delivery Nova Poshta';
 $_['ocnp_text_main_settings'] = 'Main';
 $_['ocnp_text_api_settings']  = 'API';
 $_['ocnp_text_sync_settings'] = 'Synchronization';
+
+/* Sync table on Syncronization tab */
+$_['ocnp_text_sync_table_type']  = 'Name';
+$_['ocnp_text_sync_table_count'] = 'Count';
+$_['ocnp_text_sync_table_date']  = 'Last update';
+$_['ocnp_text_sync_table_desc']  = 'Description';
+$_['ocnp_text_sync_table_sync']  = 'Synchronize';
+
+$_['ocnp_text_sync_table_cities']  = 'Cities';
+$_['ocnp_text_sync_table_cities_desc']  = 'Sync cities to which delivery by the postal company is possible';
+
+/* Entry */
 $_['entry_status']     = 'Status:';
 $_['entry_sort_order'] = 'Sort Order:';
 $_['entry_api_url']    = 'API URL';
