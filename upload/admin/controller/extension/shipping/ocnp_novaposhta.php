@@ -18,9 +18,20 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $this->model_extension_shipping_ocnp_novaposhta->uninstall();
    }
 
+   public function syncCities()
+   {
+      $respose = array(
+         'data' => 'SGAD: SyncCities'
+      );
+      $this->response->addHeader('Content-Type: application/json');
+      $this->response->setOutput(json_encode($respose));
+   }
+
    private function loadResources()
    {
       $this->load->language(self::EXTENSION_PATH);
+      $this->document->addScript('view/javascript/ocnp/ocnp_novaposhta.js');
+
       $this->document->setTitle($this->language->get('heading_title'));
       $this->m_data['heading_title'] = $this->language->get('heading_title');
       $this->m_data['text_edit'] = $this->language->get('text_edit');
