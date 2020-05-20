@@ -21,7 +21,8 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    public function syncCities()
    {
       $respose = array(
-         'data' => 'SGAD: SyncCities'
+         'success' => true,
+         'message' => 'Test message'
       );
       $this->response->addHeader('Content-Type: application/json');
       $this->response->setOutput(json_encode($respose));
