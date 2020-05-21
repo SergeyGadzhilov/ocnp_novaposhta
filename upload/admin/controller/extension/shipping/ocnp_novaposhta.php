@@ -114,14 +114,23 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       {
          $this->setBreadcrumbs();
          $this->loadSettings();
+         $this->setSyncTableInfo();
+
          $this->m_data['action'] = $this->getLink(self::EXTENSION_PATH);
          $this->m_data['cancel'] = $this->getLink('marketplace/extension');
          $this->m_data['header'] = $this->load->controller('common/header');
          $this->m_data['column_left'] = $this->load->controller('common/column_left');
          $this->m_data['footer'] = $this->load->controller('common/footer');
-
          $this->response->setOutput($this->load->view(self::EXTENSION_PATH, $this->m_data));
       }
+   }
+
+   private function setSyncTableInfo()
+   {
+      $this->load->model(self::EXTENSION_PATH);
+      $cities = $this->model_extension_shipping_ocnp_novaposhta->getCitiesTableInfo();
+      $this->m_data['ocnp_sync_table_cities_timestamp'] = $cities['Update_time'];
+      $this->m_data['ocnp_sync_table_cities_count'] = $cities['Rows'];
    }
 
    private function validate()

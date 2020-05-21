@@ -1,6 +1,8 @@
 <?php
 class ModelExtensionShippingOcnpNovaposhta extends Model {
 
+   const CITIES_TABLE = DB_PREFIX . 'ocnp_novaposhta_cities';
+
    public function getCitiesFromApi()
    {
       $request = array(
@@ -45,9 +47,20 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       return $response;
    }
 
+   public function getCitiesTableInfo()
+   {
+      return $this->getTableInfo(self::CITIES_TABLE);
+   }
+
+   public function getTableInfo($TableName)
+   {
+      $info = $this->db->query("show table status from ".DB_DATABASE." where name = '". $TableName ."';");
+      return $info->row;
+   }
+
    public function install()
    {
-      $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ocnp_novaposhta_cities` (
+      $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::CITIES_TABLE ."` (
          `AA_ID` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
          `Description` VARCHAR(50) NOT NULL,
          `DescriptionRu` VARCHAR(50) NOT NULL,
@@ -59,6 +72,6 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function uninstall()
    {
-      $this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ocnp_novaposhta_cities` ;");
+      $this->db->query("DROP TABLE IF EXISTS `" . self::CITIES_TABLE."` ;");
    }
 }
