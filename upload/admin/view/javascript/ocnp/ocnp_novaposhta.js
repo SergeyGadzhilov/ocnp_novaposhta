@@ -74,9 +74,27 @@ function OCNP_Server(){
    }
 }
 
-function SyncCities(){
+function OCNP_SyncItem(id){
+   var m_row = document.getElementById(id);
+   var m_timestamp = m_row.querySelector('.sync_item__timestamp');
+   var m_count = m_row.querySelector('.sync_item__count');
+
+   this.setTimestamp = function(timestamp){
+      m_timestamp.innerText = timestamp;
+   }
+
+   this.setCount = function(count){
+      m_count.innerText = count;
+   }
+}
+
+
+function syncCities(){
+   var id = 'syncCities';
    var server = new OCNP_Server();
-   server.sendRequest(new OCNP_Request('syncCities'), function(response){
-      console.log('callback');
+   server.sendRequest(new OCNP_Request(id), function(response){
+      var city = new OCNP_SyncItem(id);
+      city.setTimestamp(response.timestamp);
+      city.setCount(response.count);
    });
 }

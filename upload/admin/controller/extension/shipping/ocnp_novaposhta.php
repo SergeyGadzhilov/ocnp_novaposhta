@@ -20,10 +20,16 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
 
    public function syncCities()
    {
+      $this->load->model(self::EXTENSION_PATH);
+      $cities = $this->model_extension_shipping_ocnp_novaposhta->getCitiesTableInfo();
+
       $respose = array(
          'success' => true,
+         'timestamp' => $cities['Update_time'],
+         'count' => $cities['Rows'],
          'message' => 'Test message'
       );
+
       $this->response->addHeader('Content-Type: application/json');
       $this->response->setOutput(json_encode($respose));
    }
