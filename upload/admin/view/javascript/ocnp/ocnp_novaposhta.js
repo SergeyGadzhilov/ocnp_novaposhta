@@ -55,11 +55,22 @@ function OCNP_Server(){
          dataType: 'json',
          success: function(response){
             showServerMessage(response);
-            if (response.success && callback){
-               callback(response);
-            }
+            processResponse(response, callback);
          }
       });
+   }
+
+   function processResponse(response, callback){
+      if (response.success){
+         if (callback.success){
+            callback.success(response);
+         }
+      }
+      else{
+         if (callback.error){
+            callback.error(response);
+         }
+      }
    }
 
    function showServerMessage(response){
@@ -78,6 +89,8 @@ function OCNP_SyncItem(id){
    var m_row = document.getElementById(id);
    var m_timestamp = m_row.querySelector('.sync_item__timestamp');
    var m_count = m_row.querySelector('.sync_item__count');
+   var m_icon = m_row.querySelector('.sync_item__icon');
+   var m_btn = m_row.querySelector('.sync_item__btn');
 
    this.setTimestamp = function(timestamp){
       m_timestamp.innerText = timestamp;
@@ -86,15 +99,33 @@ function OCNP_SyncItem(id){
    this.setCount = function(count){
       m_count.innerText = count;
    }
+
+   this.startSync = function(){
+      m_icon.classList.add('fa-spin');
+      m_btn.classList.add('btn-danger');
+   }
+
+   this.endSync = function(){
+      m_icon.classList.remove('fa-spin');
+      m_btn.classList.remove('btn-danger');
+   }
 }
 
 
 function syncCities(){
    var id = 'syncCities';
    var server = new OCNP_Server();
-   server.sendRequest(new OCNP_Request(id), function(response){
-      var city = new OCNP_SyncItem(id);
-      city.setTimestamp(response.timestamp);
-      city.setCount(response.count);
+   var city = new OCNP_SyncItem(id);
+   city.startSync();
+
+   server.sendRequest(new OCNP_Request(id), {
+      "success" : function(response){
+         city.setTimestamp(response.timestamp);
+         city.setCount(response.count);
+         city.endSync();
+      },
+      "error" : function(response){
+         city.endSync();
+      }
    });
 }
