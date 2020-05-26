@@ -20,11 +20,13 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
 
    public function syncCities()
    {
+      $this->load->language(self::EXTENSION_PATH);
+
       $respose = array(
          'success' => true,
          'timestamp' => "",
          'count' => 0,
-         'message' => 'Test message'
+         'message' => $this->language->get('ocnp_text_sync_success')
       );
 
       $this->load->model(self::EXTENSION_PATH);

@@ -8,6 +8,7 @@ $_['text_edit']        = 'Змінити доставку Новою Пошто�
 $_['ocnp_text_main_settings'] = 'Головне';
 $_['ocnp_text_api_settings']  = 'API';
 $_['ocnp_text_sync_settings'] = 'Синхронізація';
+$_['ocnp_text_sync_success']  = 'Синхронізація успешно завершена!';
 
 /* Sync table on Syncronization tab */
 $_['ocnp_text_sync_table_type']  = 'Назва';

@@ -8,6 +8,7 @@ $_['text_edit']        = 'Edit delivery Nova Poshta';
 $_['ocnp_text_main_settings'] = 'Main';
 $_['ocnp_text_api_settings']  = 'API';
 $_['ocnp_text_sync_settings'] = 'Synchronization';
+$_['ocnp_text_sync_success']  = 'Synchronization has been finished successfully!';
 
 /* Sync table on Syncronization tab */
 $_['ocnp_text_sync_table_type']  = 'Name';
