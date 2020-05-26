@@ -20,15 +20,33 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
 
    public function syncCities()
    {
-      $this->load->model(self::EXTENSION_PATH);
-      $cities = $this->model_extension_shipping_ocnp_novaposhta->getCitiesTableInfo();
-
       $respose = array(
          'success' => true,
-         'timestamp' => $cities['Update_time'],
-         'count' => $cities['Rows'],
+         'timestamp' => "",
+         'count' => 0,
          'message' => 'Test message'
       );
+
+      $this->load->model(self::EXTENSION_PATH);
+
+      $cities = $this->model_extension_shipping_ocnp_novaposhta->getCitiesFromApi();
+      if ($cities["success"])
+      {
+         $this->model_extension_shipping_ocnp_novaposhta->clearCities();
+         foreach ($cities["data"] as $city) {
+            set_time_limit(30);
+            $this->model_extension_shipping_ocnp_novaposhta->addCity($city);
+         }
+         $this->model_extension_shipping_ocnp_novaposhta->updateCitiesSync();
+      }
+      else{
+         $respose["success"] = false;
+         $respose["message"] = $cities["errors"][0];
+      }
+
+      $CitiesTable = $this->model_extension_shipping_ocnp_novaposhta->getCitiesTableInfo();
+      $respose["timestamp"] = $CitiesTable['Timestamp'];
+      $respose["count"] =  $CitiesTable['RecordsCount'];
 
       $this->response->addHeader('Content-Type: application/json');
       $this->response->setOutput(json_encode($respose));
@@ -135,8 +153,8 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    {
       $this->load->model(self::EXTENSION_PATH);
       $cities = $this->model_extension_shipping_ocnp_novaposhta->getCitiesTableInfo();
-      $this->m_data['ocnp_sync_table_cities_timestamp'] = $cities['Update_time'];
-      $this->m_data['ocnp_sync_table_cities_count'] = $cities['Rows'];
+      $this->m_data['ocnp_sync_table_cities_timestamp'] = $cities['Timestamp'];
+      $this->m_data['ocnp_sync_table_cities_count'] = $cities['RecordsCount'];
    }
 
    private function validate()

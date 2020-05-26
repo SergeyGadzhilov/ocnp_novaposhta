@@ -2,25 +2,54 @@
 class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    const CITIES_TABLE = DB_PREFIX . 'ocnp_novaposhta_cities';
+   const SYNC_TABLE = DB_PREFIX. 'ocnp_novaposhta_sync';
 
    public function getCitiesFromApi()
    {
       $request = array(
          "modelName" => 'Address',
-         "calledMethod" => "getCities",
-         "methodProperties" => array()
+         "calledMethod" => "getCities"
       );
 
       return $this->sendRequest($request);
+   }
+
+   public function addCity($city)
+   {
+      $sql = "insert into ".self::CITIES_TABLE."(Description, DescriptionRu, Ref, Area, CityID) values (";
+      $sql .= "'".$city['Description']."',";
+      $sql .= "'".$city['DescriptionRu']."',";
+      $sql .= "'".$city['Ref']."',";
+      $sql .= "'".$city['Area']."',";
+      $sql .= "'".$city['CityID']."');";
+
+      $this->db->query($sql);
+   }
+
+   public function clearCities()
+   {
+      $query = "truncate ".self::CITIES_TABLE;
+      $this->db->query($query);
+   }
+
+   public function updateCitiesSync()
+   {
+      $this->updateSync(self::CITIES_TABLE);
+   }
+
+   private function getRecordsCount($TableName)
+   {
+      $query = $this->db->query("select count(*) records_count from ".$TableName.";");
+      return $query->row['records_count'];
    }
 
    private function getApiUrl()
    {
       $url = "https://api.novaposhta.ua/v2.0/json/";
 
-      if ($this->config->get("ocnp_novaposhta_api_url"))
+      if ($this->config->get("shipping_ocnp_novaposhta_api_url"))
       {
-         $url = $this->config->get("ocnp_novaposhta_api_url");
+         $url = $this->config->get("shipping_ocnp_novaposhta_api_url");
       }
 
       return $url;
@@ -28,7 +57,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    private function sendRequest($request)
    {
-      $request["apiKey"] = $this->config->get('ocnp_novaposhta_api_key');
+      $request["apiKey"] = $this->config->get('shipping_ocnp_novaposhta_api_key');
 
       $conection = curl_init();
 
@@ -49,29 +78,57 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function getCitiesTableInfo()
    {
-      return $this->getTableInfo(self::CITIES_TABLE);
-   }
-
-   public function getTableInfo($TableName)
-   {
-      $info = $this->db->query("show table status from ".DB_DATABASE." where name = '". $TableName ."';");
-      return $info->row;
+      return $this->getSync(self::CITIES_TABLE);
    }
 
    public function install()
    {
       $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::CITIES_TABLE ."` (
-         `AA_ID` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+         `AA_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
          `Description` VARCHAR(50) NOT NULL,
          `DescriptionRu` VARCHAR(50) NOT NULL,
          `Ref` VARCHAR(36) NOT NULL,
-         `Area` INT(11) UNSIGNED,
-         `CityID` INT(11) UNSIGNED
+         `Area` VARCHAR(36) NOT NULL,
+         `CityID` INT UNSIGNED
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+
+      $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::SYNC_TABLE ."` (
+         `AA_ID`         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+         `TableName`     VARCHAR(50) NOT NULL,
+         `RecordsCount`  INT(30) UNSIGNED,
+         `Timestamp`     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+
+      $this->installData();
+   }
+
+   private function installData()
+   {
+      $sync_tales = array(
+         self::CITIES_TABLE
+      );
+
+      foreach($sync_tales as $table)
+      {
+         $this->db->query("insert into ".self::SYNC_TABLE."(TableName, RecordsCount) values ('".$table."', 0);");
+      }
+   }
+
+   private function updateSync($TableName)
+   {
+      $RecordsCount = $this->getRecordsCount($TableName);
+      $this->db->query("update ".self::SYNC_TABLE." set RecordsCount = ".$RecordsCount." where TableName = '".$TableName."';");
+   }
+
+   private function getSync($TableName)
+   {
+      $query = $this->db->query("select * from ".self::SYNC_TABLE." where TableName = '".$TableName."'");
+      return $query->row;
    }
 
    public function uninstall()
    {
       $this->db->query("DROP TABLE IF EXISTS `" . self::CITIES_TABLE."` ;");
+      $this->db->query("DROP TABLE IF EXISTS `" . self::SYNC_TABLE."` ;");
    }
 }
