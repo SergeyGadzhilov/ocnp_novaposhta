@@ -91,6 +91,7 @@ function OCNP_SyncItem(id){
    var m_count = m_row.querySelector('.sync_item__count');
    var m_icon = m_row.querySelector('.sync_item__icon');
    var m_btn = m_row.querySelector('.sync_item__btn');
+   var m_click = m_btn.onclick;
 
    this.setTimestamp = function(timestamp){
       m_timestamp.innerText = timestamp;
@@ -103,11 +104,13 @@ function OCNP_SyncItem(id){
    this.startSync = function(){
       m_icon.classList.add('fa-spin');
       m_btn.classList.add('btn-danger');
+      m_btn.onclick = null;
    }
 
    this.endSync = function(){
       m_icon.classList.remove('fa-spin');
       m_btn.classList.remove('btn-danger');
+      m_btn.onclick = m_click;
    }
 }
 
