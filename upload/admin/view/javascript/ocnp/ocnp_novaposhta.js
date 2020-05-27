@@ -37,12 +37,17 @@ function OCNP_UserMessage(parent){
    }
 }
 
-function OCNP_Request(name){
+function OCNP_Request(name, data){
    var m_token = 'user_token='+ getURLVar('user_token');
    var m_route = 'route=extension/shipping/ocnp_novaposhta/' + name;
+   var m_data = data;
 
    this.getURL = function(){
       return ('index.php?' + m_route + '&' + m_token);
+   }
+
+   this.getData = function(){
+      return m_data;
    }
 }
 
@@ -52,7 +57,9 @@ function OCNP_Server(){
    this.sendRequest = function(request, callback){
       $.ajax({
          url: request.getURL(),
+         type: "POST",
          dataType: 'json',
+         data: request.getData(),
          success: function(response){
             showServerMessage(response);
             processResponse(response, callback);
@@ -114,14 +121,25 @@ function OCNP_SyncItem(id){
    }
 }
 
+function OCNP_ApiSettings(){
+   var m_key = document.querySelector('.ocnp_api_settings__key');
+
+   this.getKey = function(){
+      var setting = {};
+      setting[m_key.name] = m_key.value;
+      return setting;
+   }
+}
+
 
 function syncCities(){
    var id = 'syncCities';
+   var apiSettings = new OCNP_ApiSettings();
    var server = new OCNP_Server();
    var city = new OCNP_SyncItem(id);
    city.startSync();
 
-   server.sendRequest(new OCNP_Request(id), {
+   server.sendRequest(new OCNP_Request(id, apiSettings.getKey()), {
       "success" : function(response){
          city.setTimestamp(response.timestamp);
          city.setCount(response.count);

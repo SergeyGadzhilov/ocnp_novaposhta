@@ -20,6 +20,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
 
    public function syncCities()
    {
+      $this->saveSettings();
       $this->load->language(self::EXTENSION_PATH);
 
       $respose = array(
@@ -57,7 +58,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    private function loadResources()
    {
       $this->load->language(self::EXTENSION_PATH);
-      $this->document->addScript('view/javascript/ocnp/ocnp_novaposhta.js');
+      $this->document->addScript('view/javascript/ocnp/ocnp_novaposhta.js?19');
 
       $this->document->setTitle($this->language->get('heading_title'));
       $this->m_data['heading_title'] = $this->language->get('heading_title');
@@ -126,13 +127,19 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       return HTTPS_SERVER."index.php?route=".$route."&user_token=".$this->session->data['user_token'];
    }
 
+   private function saveSettings()
+   {
+      $this->load->model('setting/setting');
+      $this->model_setting_setting->editSetting(self::EXTENSION_NAME, $this->request->post);
+      $this->config->set('shipping_ocnp_novaposhta_api_key', $this->request->post['shipping_ocnp_novaposhta_api_key']);
+   }
+
    public function index()
    {
       $this->loadResources();
       if ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->validate())
       {
-         $this->load->model('setting/setting');
-         $this->model_setting_setting->editSetting(self::EXTENSION_NAME, $this->request->post);
+         $this->saveSettings();
          $this->session->data['success'] = $this->language->get('text_success');
          $this->response->redirect($this->getLink('marketplace/extension'));
       }
