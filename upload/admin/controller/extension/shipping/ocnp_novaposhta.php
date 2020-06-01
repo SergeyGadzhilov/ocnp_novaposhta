@@ -18,6 +18,43 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $this->model_extension_shipping_ocnp_novaposhta->uninstall();
    }
 
+   public function syncAreas()
+   {
+      $this->saveSettings();
+      $this->load->language(self::EXTENSION_PATH);
+
+      $respose = array(
+         'success' => true,
+         'timestamp' => "",
+         'count' => 0,
+         'message' => $this->language->get('ocnp_text_sync_success')
+      );
+
+      $this->load->model(self::EXTENSION_PATH);
+
+      $areas = $this->model_extension_shipping_ocnp_novaposhta->getAreasFromApi();
+      if ($areas["success"])
+      {
+         $this->model_extension_shipping_ocnp_novaposhta->clearAreas();
+         foreach ($areas["data"] as $area) {
+            set_time_limit(30);
+            $this->model_extension_shipping_ocnp_novaposhta->addArea($area);
+         }
+         $this->model_extension_shipping_ocnp_novaposhta->updateAreasSync();
+      }
+      else{
+         $respose["success"] = false;
+         $respose["message"] = $areas["errors"][0];
+      }
+
+      $AreasTable = $this->model_extension_shipping_ocnp_novaposhta->getAreasTableInfo();
+      $respose["timestamp"] = $AreasTable['Timestamp'];
+      $respose["count"] =  $AreasTable['RecordsCount'];
+
+      $this->response->addHeader('Content-Type: application/json');
+      $this->response->setOutput(json_encode($respose));
+   }
+
    public function syncCities()
    {
       $this->saveSettings();
@@ -164,6 +201,10 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $cities = $this->model_extension_shipping_ocnp_novaposhta->getCitiesTableInfo();
       $this->m_data['ocnp_sync_table_cities_timestamp'] = $cities['Timestamp'];
       $this->m_data['ocnp_sync_table_cities_count'] = $cities['RecordsCount'];
+
+      $areas = $this->model_extension_shipping_ocnp_novaposhta->getAreasTableInfo();
+      $this->m_data['ocnp_sync_table_areas_timestamp'] = $areas['Timestamp'];
+      $this->m_data['ocnp_sync_table_areas_count'] = $areas['RecordsCount'];
    }
 
    private function validate()

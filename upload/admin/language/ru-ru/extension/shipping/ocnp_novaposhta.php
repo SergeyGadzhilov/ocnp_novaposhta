@@ -20,6 +20,9 @@ $_['ocnp_text_sync_table_sync']  = 'Синхронизировать';
 $_['ocnp_text_sync_table_cities']  = 'Города';
 $_['ocnp_text_sync_table_cities_desc']  = 'Обновление городов, в которые возможна доставка почтовой компанией';
 
+$_['ocnp_text_sync_table_areas']  = 'Области';
+$_['ocnp_text_sync_table_areas_desc']  = 'Обновление областей, в которые возможна доставка почтовой компанией';
+
 
 /* Entry */
 $_['entry_status']     = 'Статус:';

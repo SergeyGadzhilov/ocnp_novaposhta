@@ -2,17 +2,54 @@
 class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    const CITIES_TABLE = DB_PREFIX . 'ocnp_novaposhta_cities';
+   const AREAS_TABLE = DB_PREFIX . 'ocnp_novaposhta_areas';
    const SYNC_TABLE = DB_PREFIX. 'ocnp_novaposhta_sync';
    const EXTENSION_PATH = 'extension/shipping/ocnp_novaposhta';
+
+   public function getAreasFromApi()
+   {
+      $request = array(
+         "modelName" => "Address",
+         "calledMethod" => "getAreas"
+      );
+
+      return $this->sendRequest($request);
+   }
 
    public function getCitiesFromApi()
    {
       $request = array(
-         "modelName" => 'Address',
+         "modelName" => "Address",
          "calledMethod" => "getCities"
       );
 
       return $this->sendRequest($request);
+   }
+
+   public function addArea($area)
+   {
+      $sql = "insert into ".self::AREAS_TABLE."(Description, Ref, AreasCenter) values (";
+      $sql .= "'".$area['Description']."',";
+      $sql .= "'".$area['Ref']."',";
+      $sql .= "'".$city['AreasCenter']."';";
+
+      $this->db->query($sql);
+   }
+
+   public function clearAreas()
+   {
+      $this->clearTable(self::AREAS_TABLE);
+   }
+
+   public function updateAreasSync()
+   {
+      $this->updateSync(self::AREAS_TABLE);
+   }
+
+   private function clearTable($Table)
+   {
+      $query = "truncate ".$Table;
+      $this->db->query($query);
    }
 
    public function addCity($city)
@@ -29,8 +66,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function clearCities()
    {
-      $query = "truncate ".self::CITIES_TABLE;
-      $this->db->query($query);
+      $this->clearTable(self::CITIES_TABLE);
    }
 
    public function updateCitiesSync()
@@ -92,6 +128,11 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       return $this->getSync(self::CITIES_TABLE);
    }
 
+   public function getAreasTableInfo()
+   {
+      return $this->getSync(self::AREAS_TABLE);
+   }
+
    public function install()
    {
       $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::CITIES_TABLE ."` (
@@ -110,13 +151,21 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
          `Timestamp`     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
 
+      $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::AREAS_TABLE ."` (
+         `AA_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+         `Description` VARCHAR(50) NOT NULL,
+         `Ref` VARCHAR(36) NOT NULL,
+         `AreasCenter` VARCHAR(36) NOT NULL
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+
       $this->installData();
    }
 
    private function installData()
    {
       $sync_tales = array(
-         self::CITIES_TABLE
+         self::CITIES_TABLE,
+         self::AREAS_TABLE
       );
 
       foreach($sync_tales as $table)
@@ -140,6 +189,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    public function uninstall()
    {
       $this->db->query("DROP TABLE IF EXISTS `" . self::CITIES_TABLE."` ;");
+      $this->db->query("DROP TABLE IF EXISTS `" . self::AREAS_TABLE."` ;");
       $this->db->query("DROP TABLE IF EXISTS `" . self::SYNC_TABLE."` ;");
    }
 }

@@ -132,8 +132,7 @@ function OCNP_ApiSettings(){
 }
 
 
-function syncCities(){
-   var id = 'syncCities';
+function syncItem(id){
    var apiSettings = new OCNP_ApiSettings();
    var server = new OCNP_Server();
    var city = new OCNP_SyncItem(id);
