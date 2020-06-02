@@ -23,6 +23,9 @@ $_['ocnp_text_sync_table_cities_desc']  = 'Sync cities to which delivery by the 
 $_['ocnp_text_sync_table_areas']  = 'Areas';
 $_['ocnp_text_sync_table_areas_desc']  = 'Sync areas to which delivery by the postal company is possible';
 
+$_['ocnp_text_sync_table_warehouses']  = 'Warehouses';
+$_['ocnp_text_sync_table_warehouses_desc']  = 'Sync warehouses';
+
 /* Entry */
 $_['entry_status']     = 'Status:';
 $_['entry_sort_order'] = 'Sort Order:';

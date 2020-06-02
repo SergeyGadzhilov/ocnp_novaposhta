@@ -18,6 +18,43 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $this->model_extension_shipping_ocnp_novaposhta->uninstall();
    }
 
+   public function syncWarehouses()
+   {
+      $this->saveSettings();
+      $this->load->language(self::EXTENSION_PATH);
+
+      $respose = array(
+         'success' => true,
+         'timestamp' => "",
+         'count' => 0,
+         'message' => $this->language->get('ocnp_text_sync_success')
+      );
+
+      $this->load->model(self::EXTENSION_PATH);
+
+      $warehouses = $this->model_extension_shipping_ocnp_novaposhta->getWarehousesFromApi();
+      if ($warehouses["success"])
+      {
+         $this->model_extension_shipping_ocnp_novaposhta->clearWarehouses();
+         foreach ($warehouses["data"] as $warehouse) {
+            set_time_limit(30);
+            $this->model_extension_shipping_ocnp_novaposhta->addWarehous($warehouse);
+         }
+         $this->model_extension_shipping_ocnp_novaposhta->updateWarehousesSync();
+      }
+      else{
+         $respose["success"] = false;
+         $respose["message"] = $warehouses["errors"][0];
+      }
+
+      $WarehouseTable = $this->model_extension_shipping_ocnp_novaposhta->getWarehousesTableInfo();
+      $respose["timestamp"] = $WarehouseTable['Timestamp'];
+      $respose["count"] =  $WarehouseTable['RecordsCount'];
+
+      $this->response->addHeader('Content-Type: application/json');
+      $this->response->setOutput(json_encode($respose));
+   }
+
    public function syncAreas()
    {
       $this->saveSettings();
@@ -205,6 +242,10 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $areas = $this->model_extension_shipping_ocnp_novaposhta->getAreasTableInfo();
       $this->m_data['ocnp_sync_table_areas_timestamp'] = $areas['Timestamp'];
       $this->m_data['ocnp_sync_table_areas_count'] = $areas['RecordsCount'];
+
+      $warehouses = $this->model_extension_shipping_ocnp_novaposhta->getWarehousesTableInfo();
+      $this->m_data['ocnp_sync_table_warehouses_timestamp'] = $areas['Timestamp'];
+      $this->m_data['ocnp_sync_table_warehouses_count'] = $areas['RecordsCount'];
    }
 
    private function validate()

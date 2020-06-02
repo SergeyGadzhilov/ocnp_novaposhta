@@ -23,6 +23,9 @@ $_['ocnp_text_sync_table_cities_desc']  = 'Оновлення міст, в як�
 $_['ocnp_text_sync_table_areas']  = 'Області';
 $_['ocnp_text_sync_table_areas_desc']  = 'Оновлення областей, в які можлива доставка поштовою компанією';
 
+$_['ocnp_text_sync_table_warehouses']  = 'Відділення';
+$_['ocnp_text_sync_table_warehouses_desc']  = 'Оновлення відділень';
+
 /* Entry */
 $_['entry_status']     = 'Статус:';
 $_['entry_sort_order'] = 'Порядок сортування:';

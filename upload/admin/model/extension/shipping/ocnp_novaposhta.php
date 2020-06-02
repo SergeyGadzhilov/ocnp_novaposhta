@@ -4,7 +4,9 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    const CITIES_TABLE = DB_PREFIX . 'ocnp_novaposhta_cities';
    const AREAS_TABLE = DB_PREFIX . 'ocnp_novaposhta_areas';
    const SYNC_TABLE = DB_PREFIX. 'ocnp_novaposhta_sync';
+   const WAREHOUSES_TABLE = DB_PREFIX. 'ocnp_novaposhta_warehouses';
    const EXTENSION_PATH = 'extension/shipping/ocnp_novaposhta';
+
 
    public function getAreasFromApi()
    {
@@ -21,6 +23,16 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       $request = array(
          "modelName" => "Address",
          "calledMethod" => "getCities"
+      );
+
+      return $this->sendRequest($request);
+   }
+
+   public function getWarehousesFromApi()
+   {
+      $request = array(
+         "modelName" => "AddressGeneral",
+         "calledMethod" => "getWarehouses"
       );
 
       return $this->sendRequest($request);
@@ -45,6 +57,35 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    public function updateAreasSync()
    {
       $this->updateSync(self::AREAS_TABLE);
+   }
+
+   public function addWarehous($warehous)
+   {
+      $sql = "insert into ".self::WAREHOUSES_TABLE."( ";
+      $sql .= "SiteKey, Description, DescriptionRu, Ref, Phone, TypeOfWarehouse, ";
+      $sql .= "Number, CityRef, TotalMaxWeightAllowed, PlaceMaxWeightAllowed) values (";
+      $sql .= "'".$warehous['SiteKey']."',";
+      $sql .= "'".$warehous['Description']."',";
+      $sql .= "'".$warehous['DescriptionRu']."',";
+      $sql .= "'".$warehous['Ref']."',";
+      $sql .= "'".$warehous['Phone']."',";
+      $sql .= "'".$warehous['TypeOfWarehouse']."',";
+      $sql .= "'".$warehous['Number']."',";
+      $sql .= "'".$warehous['CityRef']."',";
+      $sql .= "'".$warehous['TotalMaxWeightAllowed']."',";
+      $sql .= "'".$warehous['PlaceMaxWeightAllowed']."');";
+
+      $this->db->query($sql);
+   }
+
+   public function clearWarehouses()
+   {
+      $this->clearTable(self::WAREHOUSES_TABLE);
+   }
+
+   public function updateWarehousesSync()
+   {
+      $this->updateSync(self::WAREHOUSES_TABLE);
    }
 
    private function clearTable($Table)
@@ -129,6 +170,11 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       return $this->getSync(self::CITIES_TABLE);
    }
 
+   public function getWarehousesTableInfo()
+   {
+      return $this->getSync(self::WAREHOUSES_TABLE);
+   }
+
    public function getAreasTableInfo()
    {
       return $this->getSync(self::AREAS_TABLE);
@@ -160,6 +206,20 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
          `AreasCenter` VARCHAR(36) NOT NULL
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
 
+      $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::WAREHOUSES_TABLE ."` (
+         `AA_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+         `SiteKey` VARCHAR(36) NOT NULL,
+         `Description` VARCHAR(50) NOT NULL,
+         `DescriptionRu` VARCHAR(50) NOT NULL,
+         `Ref` VARCHAR(36) NOT NULL,
+         `Phone` VARCHAR(36) NOT NULL,
+         `TypeOfWarehouse` VARCHAR(36) NOT NULL,
+         `Number` VARCHAR(36) NOT NULL,
+         `CityRef` VARCHAR(36) NOT NULL,
+         `TotalMaxWeightAllowed` INT, 
+         `PlaceMaxWeightAllowed` INT
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+
       $this->installData();
    }
 
@@ -167,7 +227,8 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    {
       $sync_tales = array(
          self::CITIES_TABLE,
-         self::AREAS_TABLE
+         self::AREAS_TABLE,
+         self::WAREHOUSES_TABLE
       );
 
       foreach($sync_tales as $table)
@@ -193,5 +254,6 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       $this->db->query("DROP TABLE IF EXISTS `" . self::CITIES_TABLE."` ;");
       $this->db->query("DROP TABLE IF EXISTS `" . self::AREAS_TABLE."` ;");
       $this->db->query("DROP TABLE IF EXISTS `" . self::SYNC_TABLE."` ;");
+      $this->db->query("DROP TABLE IF EXISTS `" . self::WAREHOUSES_TABLE."` ;");
    }
 }
