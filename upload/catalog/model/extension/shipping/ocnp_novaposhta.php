@@ -23,7 +23,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
          $this->m_data['quote'] = array(
             'warehouse' => array(
                'code' => 'ocnp_novaposhta.warehouse',
-               'title' => $this->language->get('text_description'),
+               'title' => $this->config->get($this->settingName('name')),
                'cost' => 0,
                'tax_class_id' => 0,
                'text' => '',

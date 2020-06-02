@@ -176,7 +176,8 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          $this->settingName('status') => '0',
          $this->settingName('api_url') => 'https://api.novaposhta.ua/v2.0/json/',
          $this->settingName('api_key') => '',
-         $this->settingName('sort_order') => '0'
+         $this->settingName('sort_order') => '0',
+         $this->settingName('name') => $this->language->get('heading_title')
       );
 
       foreach($settings as $setting => $defaultValue)
@@ -244,8 +245,8 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $this->m_data['ocnp_sync_table_areas_count'] = $areas['RecordsCount'];
 
       $warehouses = $this->model_extension_shipping_ocnp_novaposhta->getWarehousesTableInfo();
-      $this->m_data['ocnp_sync_table_warehouses_timestamp'] = $areas['Timestamp'];
-      $this->m_data['ocnp_sync_table_warehouses_count'] = $areas['RecordsCount'];
+      $this->m_data['ocnp_sync_table_warehouses_timestamp'] = $warehouses['Timestamp'];
+      $this->m_data['ocnp_sync_table_warehouses_count'] = $warehouses['RecordsCount'];
    }
 
    private function validate()

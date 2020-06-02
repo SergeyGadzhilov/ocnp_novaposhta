@@ -10,6 +10,7 @@ $_['ocnp_text_api_settings']  = 'API';
 $_['ocnp_text_sync_settings'] = 'Synchronization';
 $_['ocnp_text_sync_success']  = 'Synchronization has been finished successfully!';
 
+
 /* Sync table on Syncronization tab */
 $_['ocnp_text_sync_table_type']  = 'Name';
 $_['ocnp_text_sync_table_count'] = 'Count';
@@ -31,6 +32,8 @@ $_['entry_status']     = 'Status:';
 $_['entry_sort_order'] = 'Sort Order:';
 $_['entry_api_url']    = 'API URL';
 $_['entry_api_key']    = 'API Key';
+$_['ocnp_entry_name']  = 'Name';
+
 
 /* Errors */
 $_['error_permission']          = 'Warning: You do not have permission to modify attributes!';

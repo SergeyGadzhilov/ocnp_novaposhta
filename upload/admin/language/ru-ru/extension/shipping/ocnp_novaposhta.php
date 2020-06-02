@@ -32,6 +32,7 @@ $_['entry_status']     = 'Статус:';
 $_['entry_sort_order'] = 'Порядок сортировки:';
 $_['entry_api_url']    = 'URL-адрес API';
 $_['entry_api_key']    = 'Ваш ключ API';
+$_['ocnp_entry_name']  = 'Название';
 
 /* Errors */
 $_['error_permission'] = 'У Вас нет прав для управления этим модулем!';
