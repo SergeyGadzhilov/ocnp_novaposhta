@@ -28,10 +28,11 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function addArea($area)
    {
-      $sql = "insert into ".self::AREAS_TABLE."(Description, Ref, AreasCenter) values (";
+      $sql = "insert into ".self::AREAS_TABLE."(Description, DescriptionRu, Ref, AreasCenter) values (";
       $sql .= "'".$area['Description']."',";
+      $sql .= "'".$area['DescriptionRu']."',";
       $sql .= "'".$area['Ref']."',";
-      $sql .= "'".$city['AreasCenter']."';";
+      $sql .= "'".$area['AreasCenter']."');";
 
       $this->db->query($sql);
    }
@@ -154,6 +155,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::AREAS_TABLE ."` (
          `AA_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
          `Description` VARCHAR(50) NOT NULL,
+         `DescriptionRu` VARCHAR(50) NOT NULL,
          `Ref` VARCHAR(36) NOT NULL,
          `AreasCenter` VARCHAR(36) NOT NULL
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
