@@ -224,6 +224,8 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          $this->loadSettings();
          $this->setSyncTableInfo();
 
+         $this->load->model('localisation/language');
+         $this->m_data['languages'] = $this->model_localisation_language->getLanguages();
          $this->m_data['action'] = $this->getLink(self::EXTENSION_PATH);
          $this->m_data['cancel'] = $this->getLink('marketplace/extension');
          $this->m_data['header'] = $this->load->controller('common/header');
