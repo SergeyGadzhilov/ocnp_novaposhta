@@ -170,15 +170,33 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       return self::EXTENSION_NAME.'_'.$setting;
    }
 
+   private function loadLanguageSpecificSettings($settings)
+   {
+      $this->load->model('localisation/language');
+      $languages = $this->model_localisation_language->getLanguages();
+
+      $names = array();
+      foreach($languages as $language)
+      {
+         $translation = new Language($language['code']);
+         $translation->load(self::EXTENSION_PATH);
+         $names[$language['language_id']] = $translation->get('heading_title');
+      }
+      $settings[$this->settingName('name')] = $names;
+
+      return $settings;
+   }
+
    private function loadSettings()
    {
       $settings = array(
          $this->settingName('status') => '0',
          $this->settingName('api_url') => 'https://api.novaposhta.ua/v2.0/json/',
          $this->settingName('api_key') => '',
-         $this->settingName('sort_order') => '0',
-         $this->settingName('name') => $this->language->get('heading_title')
+         $this->settingName('sort_order') => '0'
       );
+
+      $settings = $this->loadLanguageSpecificSettings($settings);
 
       foreach($settings as $setting => $defaultValue)
       {
@@ -224,7 +242,6 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          $this->loadSettings();
          $this->setSyncTableInfo();
 
-         $this->load->model('localisation/language');
          $this->m_data['languages'] = $this->model_localisation_language->getLanguages();
          $this->m_data['action'] = $this->getLink(self::EXTENSION_PATH);
          $this->m_data['cancel'] = $this->getLink('marketplace/extension');
