@@ -11,10 +11,11 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       if ($this->config->get($this->settingName('status')))
       {
          $this->load->language(self::MODULE_PATH);
+         $title = $this->config->get($this->settingName('name'));
 
          $this->m_data = array(
             'code' => self::MODULE_NAME,
-            'title' => $this->language->get('text_description'),
+            'title' => $title[$this->config->get('config_language_id')],
             'sort_order' => $this->config->get($this->settingName('sort_order')),
             'error' => FALSE,
             'quote' => array()
@@ -23,7 +24,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
          $this->m_data['quote'] = array(
             'warehouse' => array(
                'code' => 'ocnp_novaposhta.warehouse',
-               'title' => $this->config->get($this->settingName('name')),
+               'title' => $title[$this->config->get('config_language_id')],
                'cost' => 0,
                'tax_class_id' => 0,
                'text' => '',
