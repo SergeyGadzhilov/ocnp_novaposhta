@@ -4,6 +4,8 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    const MODULE_NAME = 'shipping_ocnp_novaposhta';
    const MODULE_PATH = 'extension/shipping/ocnp_novaposhta';
+   const CITIES_TABLE = DB_PREFIX . 'ocnp_novaposhta_cities';
+
    private $m_data = array();
 
    public function getQuote($address)
@@ -48,58 +50,12 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    private function getCities()
    {
-      $request = array(
-         "modelName" => "Address",
-         "calledMethod" => "getCities"
-      );
-
-      $response = $this->sendRequest($request);
-
-      $cities = array();
-
-      if ($response['success'])
-      {
-         $cities = $response["data"];
-      }
-
-      return $cities;
+      $query = $this->db->query("SELECT * FROM ".self::CITIES_TABLE);
+      return $query->rows;
    }
 
    private function settingName($setting)
    {
       return self::MODULE_NAME.'_'.$setting;
-   }
-
-   private function getApiUrl()
-   {
-      $url = "https://api.novaposhta.ua/v2.0/json/";
-
-      if ($this->config->get($this->settingName('api_url')))
-      {
-         $url = $this->config->get($this->settingName('api_url'));
-      }
-
-      return $url;
-   }
-
-   private function sendRequest($request)
-   {
-      $request["apiKey"] = $this->config->get($this->settingName('api_key'));
-
-      $conection = curl_init();
-
-      curl_setopt($conection, CURLOPT_POST, 1);
-      curl_setopt($conection, CURLOPT_HEADER, 0);
-      curl_setopt($conection, CURLOPT_SSL_VERIFYPEER, 0);
-      curl_setopt($conection, CURLOPT_RETURNTRANSFER, 1);
-      curl_setopt($conection, CURLOPT_URL, $this->getApiUrl());
-      curl_setopt($conection, CURLOPT_HTTPHEADER, Array("Content-Type: text/plain"));
-      curl_setopt($conection, CURLOPT_POSTFIELDS, json_encode($request));
-
-      $response = json_decode(curl_exec($conection), TRUE);
-
-      curl_close($conection);
-
-      return $response;
    }
 }
