@@ -1,5 +1,20 @@
 <?php
 
+class OCNPNovaPoshtaForm
+{
+   private $m_form;
+
+   public function __construct($form)
+   {
+      $this->m_form = json_encode($form);
+   }
+
+    public function show()
+    {
+      return json_decode($this->m_form);
+    }
+}
+
 class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    const MODULE_NAME = 'shipping_ocnp_novaposhta';
@@ -45,7 +60,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
          'cities' => $this->getCities()
       );
 
-      return $this->load->view(self::MODULE_PATH, $data);
+      return new OCNPNovaPoshtaForm($this->load->view(self::MODULE_PATH, $data));
    }
 
    private function getCities()

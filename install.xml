@@ -10,7 +10,7 @@
             {{ quote.title }} - {{ quote.text }}</label>
             ]]></search>
             <add position="after"><![CDATA[
-            {% if quote.form is defined %}{{quote.form}}{% endif %}
+            {% if quote.form is defined %}{{quote.form.show()}}{% endif %}
             ]]></add>
         </operation>
     </file>
