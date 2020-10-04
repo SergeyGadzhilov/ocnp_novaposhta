@@ -1,4 +1,11 @@
 <div class="form-group">
+   <label for="ocnp_novaposhta_area">{{text_ocnp_area_label}}</label>
+   <select class="form-control" id="ocnp_novaposhta_area" name='ocnp_novaposhta_area'>
+      <option value="">{{text_ocnp_select_area_placeholder}}</option>
+      {% for area in areas %}
+         <option id="{{area.Ref}}" value="{{area.Description}}">{{area.Description}}</option>
+      {% endfor %}
+   </select>
    <label for="ocnp_novaposhta_city">{{text_ocnp_city_label}}</label>
    <select class="form-control" id="ocnp_novaposhta_city">
       {% for city in cities %}

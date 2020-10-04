@@ -20,6 +20,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    const MODULE_NAME = 'shipping_ocnp_novaposhta';
    const MODULE_PATH = 'extension/shipping/ocnp_novaposhta';
    const CITIES_TABLE = DB_PREFIX . 'ocnp_novaposhta_cities';
+   const AREAS_TABLE = DB_PREFIX . 'ocnp_novaposhta_areas';
 
    private $m_data = array();
 
@@ -57,7 +58,8 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    {
       $data = array(
          'text_ocnp_city_label' => $this->language->get('text_ocnp_city_label'),
-         'cities' => $this->getCities()
+         'cities' => $this->getCities(),
+         'areas'  => $this->getAreas()
       );
 
       return new OCNPNovaPoshtaForm($this->load->view(self::MODULE_PATH, $data));
@@ -66,6 +68,12 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    private function getCities()
    {
       $query = $this->db->query("SELECT * FROM ".self::CITIES_TABLE);
+      return $query->rows;
+   }
+
+   private function getAreas()
+   {
+      $query = $this->db->query("SELECT * FROM ".self::AREAS_TABLE);
       return $query->rows;
    }
 
