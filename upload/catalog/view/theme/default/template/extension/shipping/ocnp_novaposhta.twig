@@ -1,20 +1,23 @@
-<div class="form-group">
+<div id="ocnp_novaposhta_area" class="form-group">
    <label for="ocnp_novaposhta_area">{{text_ocnp_area_label}}</label>
-   <select class="form-control" id="ocnp_novaposhta_area" name='ocnp_novaposhta_area'>
+   <select onchange="OCNP_ShowCity();" class="form-control" name='ocnp_novaposhta_area'>
       <option value="">{{text_ocnp_select_area_placeholder}}</option>
       {% for area in areas %}
          <option id="{{area.Ref}}" value="{{area.Description}}">{{area.Description}}</option>
       {% endfor %}
    </select>
+ </div>
+ <div id="ocnp_novaposhta_city" class="form-group" style="display: none;">
    <label for="ocnp_novaposhta_city">{{text_ocnp_city_label}}</label>
-   <select class="form-control" id="ocnp_novaposhta_city">
+   <select  class="form-control" name="ocnp_novaposhta_city">
+      <option value="">{{text_ocnp_select_city_placeholder}}</option>
       {% for city in cities %}
          <option value="{{city.Ref}}">{{city.Description}}</option>
       {% endfor %}
    </select>
  </div>
- <div class="form-group">
+ <div id="ocnp_novaposhta_warehouse" class="form-group" style="display: none;">
    <label for="ocnp_novaposhta_warehouse">{{text_ocnp_warehouse_label}}</label>
-   <select class="form-control" id="ocnp_novaposhta_warehouse">
+   <select class="form-control" name="ocnp_novaposhta_warehouse">
    </select>
  </div>

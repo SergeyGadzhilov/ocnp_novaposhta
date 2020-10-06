@@ -24,6 +24,16 @@
             ]]></add>
         </operation>
     </file>
+    <file path="catalog/controller/checkout/checkout.php">
+        <operation>
+            <search><![CDATA[
+            $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+            ]]></search>
+            <add position="after"><![CDATA[
+            $this->document->addScript('catalog/view/javascript/ocnp_novaposhta/checkout.js');
+            ]]></add>
+        </operation>
+    </file>
     <file path="catalog/controller/checkout/shipping_method.php">
         <operation>
             <search><![CDATA[
@@ -34,10 +44,8 @@
             {
                if ($this->request->post['shipping_method'] == 'ocnp_novaposhta.warehouse')
                {
-                  if (isset($this->request->post['ocnp_novaposhta_area']))
-                  {
-                     $this->session->data['shipping_address']['zone'] = $this->request->post['ocnp_novaposhta_area'];
-                  }
+                  $this->session->data['shipping_address']['zone'] = $this->request->post['ocnp_novaposhta_area'];
+                  $this->session->data['shipping_address']['city'] = $this->request->post['ocnp_novaposhta_city'];
                }
             }
             ]]></add>
