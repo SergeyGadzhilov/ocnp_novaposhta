@@ -127,9 +127,63 @@ function OCNP_City(){
    }
 }
 
+function OCNP_Warehouse(){
+   var self = this;
+   var m_control = new OCNP_Select("ocnp_novaposhta_warehouse");
+
+   self.show = function(city_id){
+      if (city_id){
+         showWarehouses(city_id);
+      }
+      else{
+         m_control.hide();
+      }
+   }
+
+   function setCities(warehouses){
+      m_control.clear();
+
+      for (i = 1; i < warehouses.length; ++i){
+         var option = document.createElement('option');
+         option.id = warehouses[i].Ref;
+         option.value = warehouses[i].Description;
+         option.text = option.value;
+
+         m_control.addOption(option);
+      }
+   }
+
+   function showWarehouses(city_id){
+      var server = new OCNP_Server();
+      var data = {'city_id': city_id};
+
+      server.sendRequest(new OCNP_Request('getWarehouses', data),{
+            'success': function(response){
+               if (response.warehouses.length > 0){
+                  setCities(response.warehouses)
+                  m_control.show();
+               }
+               else{
+                  m_control.hide();
+               }
+            },
+            'error' : function(response){
+               m_control.hide();
+            }
+      });
+   }
+}
+
 function OCNP_ShowCity(){
    var area = new OCNP_Select("ocnp_novaposhta_area");
    var city = new OCNP_City();
 
    city.show(area.getSelectedID());
+}
+
+function OCNP_ShowWarehouse(){
+   var city = new OCNP_Select("ocnp_novaposhta_city");
+   var warehouse = new OCNP_Warehouse();
+   
+   warehouse.show(city.getSelectedID());
 }

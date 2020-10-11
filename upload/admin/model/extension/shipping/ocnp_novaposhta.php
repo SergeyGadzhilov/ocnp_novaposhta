@@ -184,8 +184,8 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    {
       $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::CITIES_TABLE ."` (
          `AA_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-         `Description` VARCHAR(50) NOT NULL,
-         `DescriptionRu` VARCHAR(50) NOT NULL,
+         `Description` VARCHAR(250) NOT NULL,
+         `DescriptionRu` VARCHAR(250) NOT NULL,
          `Ref` VARCHAR(36) NOT NULL,
          `Area` VARCHAR(36) NOT NULL,
          `CityID` INT UNSIGNED
@@ -200,8 +200,8 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
       $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::AREAS_TABLE ."` (
          `AA_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-         `Description` VARCHAR(50) NOT NULL,
-         `DescriptionRu` VARCHAR(50) NOT NULL,
+         `Description` VARCHAR(250) NOT NULL,
+         `DescriptionRu` VARCHAR(250) NOT NULL,
          `Ref` VARCHAR(36) NOT NULL,
          `AreasCenter` VARCHAR(36) NOT NULL
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
@@ -209,8 +209,8 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::WAREHOUSES_TABLE ."` (
          `AA_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
          `SiteKey` VARCHAR(36) NOT NULL,
-         `Description` VARCHAR(50) NOT NULL,
-         `DescriptionRu` VARCHAR(50) NOT NULL,
+         `Description` VARCHAR(250) NOT NULL,
+         `DescriptionRu` VARCHAR(250) NOT NULL,
          `Ref` VARCHAR(36) NOT NULL,
          `Phone` VARCHAR(36) NOT NULL,
          `TypeOfWarehouse` VARCHAR(36) NOT NULL,

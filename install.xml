@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modification>
     <code>OCNPNOVAPOSHTA1.0</code>
-    <name>Parameters form for OCNP Nova Poshta</name>
+    <name>OCNP Nova Poshta</name>
     <version>1.0</version>
     <author>gadzhilov.sergey@gmail.com</author>
     <file path="catalog/view/theme/*/template/checkout/shipping_method.twig">
@@ -59,6 +59,7 @@
                {
                   $this->session->data['shipping_address']['zone'] = $this->OCNP_getValue('ocnp_novaposhta_area', 'zone');
                   $this->session->data['shipping_address']['city'] = $this->OCNP_getValue('ocnp_novaposhta_city', 'city');
+                  $this->session->data['shipping_address']['address_1'] = $this->OCNP_getValue('ocnp_novaposhta_warehouse', 'address_1');
                }
             }
 

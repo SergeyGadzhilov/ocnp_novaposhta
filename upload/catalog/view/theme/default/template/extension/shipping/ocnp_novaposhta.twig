@@ -9,12 +9,13 @@
  </div>
  <div id="ocnp_novaposhta_city" class="form-group" style="display: none;">
    <label for="ocnp_novaposhta_city">{{text_ocnp_city_label}}</label>
-   <select  class="form-control" name="ocnp_novaposhta_city">
+   <select onchange="OCNP_ShowWarehouse();" class="form-control" name="ocnp_novaposhta_city">
       <option value="">{{text_ocnp_select_city_placeholder}}</option>
    </select>
  </div>
  <div id="ocnp_novaposhta_warehouse" class="form-group" style="display: none;">
    <label for="ocnp_novaposhta_warehouse">{{text_ocnp_warehouse_label}}</label>
    <select class="form-control" name="ocnp_novaposhta_warehouse">
+      <option value="">{{text_ocnp_select_warehouse_placeholder}}</option>
    </select>
  </div>

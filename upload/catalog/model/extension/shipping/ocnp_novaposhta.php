@@ -21,6 +21,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    const MODULE_PATH = 'extension/shipping/ocnp_novaposhta';
    const CITIES_TABLE = DB_PREFIX . 'ocnp_novaposhta_cities';
    const AREAS_TABLE = DB_PREFIX . 'ocnp_novaposhta_areas';
+   const WAREHOUSES_TABLE = DB_PREFIX. 'ocnp_novaposhta_warehouses';
 
    private $m_data = array();
 
@@ -66,6 +67,11 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    public function getCitiesByAreaID($area)
    {
       $query = $this->db->query("SELECT * FROM ".self::CITIES_TABLE." WHERE Area = '".$area."'");
+      return $query->rows;
+   }
+
+   public function getWarehousesByCityID($city){
+      $query = $this->db->query("SELECT * FROM ".self::WAREHOUSES_TABLE." WHERE CityRef = '".$city."'");
       return $query->rows;
    }
 
