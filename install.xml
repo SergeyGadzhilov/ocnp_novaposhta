@@ -40,14 +40,28 @@
             public function save() {
             ]]></search>
             <add position="before"><![CDATA[
-            public function OCNP_updateShippingAddress()
+
+            private function OCNP_getValue($name, $address_name)
+            {
+               $value = $this->session->data['shipping_address'][$address_name];
+
+               if (isset($this->request->post[$name]))
+               {
+                  $value = $this->request->post[$name];
+               }
+
+               return $value;
+            }
+
+            private function OCNP_updateShippingAddress()
             {
                if ($this->request->post['shipping_method'] == 'ocnp_novaposhta.warehouse')
                {
-                  $this->session->data['shipping_address']['zone'] = $this->request->post['ocnp_novaposhta_area'];
-                  $this->session->data['shipping_address']['city'] = $this->request->post['ocnp_novaposhta_city'];
+                  $this->session->data['shipping_address']['zone'] = $this->OCNP_getValue('ocnp_novaposhta_area', 'zone');
+                  $this->session->data['shipping_address']['city'] = $this->OCNP_getValue('ocnp_novaposhta_city', 'city');
                }
             }
+
             ]]></add>
         </operation>
         <operation>

@@ -11,9 +11,6 @@
    <label for="ocnp_novaposhta_city">{{text_ocnp_city_label}}</label>
    <select  class="form-control" name="ocnp_novaposhta_city">
       <option value="">{{text_ocnp_select_city_placeholder}}</option>
-      {% for city in cities %}
-         <option value="{{city.Ref}}">{{city.Description}}</option>
-      {% endfor %}
    </select>
  </div>
  <div id="ocnp_novaposhta_warehouse" class="form-group" style="display: none;">

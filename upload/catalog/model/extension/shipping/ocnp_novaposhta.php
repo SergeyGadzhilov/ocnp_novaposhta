@@ -57,17 +57,15 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    private function getForm()
    {
       $data = array(
-         'text_ocnp_city_label' => $this->language->get('text_ocnp_city_label'),
-         'cities' => $this->getCities(),
          'areas'  => $this->getAreas()
       );
 
       return new OCNPNovaPoshtaForm($this->load->view(self::MODULE_PATH, $data));
    }
 
-   private function getCities()
+   public function getCitiesByAreaID($area)
    {
-      $query = $this->db->query("SELECT * FROM ".self::CITIES_TABLE);
+      $query = $this->db->query("SELECT * FROM ".self::CITIES_TABLE." WHERE Area = '".$area."'");
       return $query->rows;
    }
 

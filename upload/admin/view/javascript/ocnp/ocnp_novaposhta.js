@@ -135,17 +135,17 @@ function OCNP_ApiSettings(){
 function syncItem(id){
    var apiSettings = new OCNP_ApiSettings();
    var server = new OCNP_Server();
-   var city = new OCNP_SyncItem(id);
-   city.startSync();
+   var item = new OCNP_SyncItem(id);
+   item.startSync();
 
    server.sendRequest(new OCNP_Request(id, apiSettings.getKey()), {
       "success" : function(response){
-         city.setTimestamp(response.timestamp);
-         city.setCount(response.count);
-         city.endSync();
+         item.setTimestamp(response.timestamp);
+         item.setCount(response.count);
+         item.endSync();
       },
       "error" : function(response){
-         city.endSync();
+         item.endSync();
       }
    });
 }
