@@ -10,6 +10,8 @@ $_['ocnp_text_api_settings']  = 'API';
 $_['ocnp_text_support_tab']   = 'Підтримка';
 $_['ocnp_text_sync_settings'] = 'Синхронізація';
 $_['ocnp_text_sync_success']  = 'Синхронізація успешно завершена!';
+$_['ocnp_text_contacts_label'] = 'Контакти';
+$_['ocnp_text_contacts_text'] = 'З усіх питань, які пов\'язані з роботою доповнення звертайтеся за адресою:';
 
 /* Sync table on Syncronization tab */
 $_['ocnp_text_sync_table_type']  = 'Назва';

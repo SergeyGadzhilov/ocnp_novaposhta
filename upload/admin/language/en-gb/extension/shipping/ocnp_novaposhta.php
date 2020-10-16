@@ -10,6 +10,8 @@ $_['ocnp_text_api_settings']  = 'API';
 $_['ocnp_text_support_tab']   = 'Support';
 $_['ocnp_text_sync_settings'] = 'Synchronization';
 $_['ocnp_text_sync_success']  = 'Synchronization has been finished successfully!';
+$_['ocnp_text_contacts_label'] = 'Contacts';
+$_['ocnp_text_contacts_text'] = 'For all questions related to the add-on, please contact:';
 
 
 /* Sync table on Syncronization tab */
