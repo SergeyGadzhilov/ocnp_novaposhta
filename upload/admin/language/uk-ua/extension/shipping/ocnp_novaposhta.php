@@ -7,6 +7,7 @@ $_['text_success']     = 'Налаштування модуля поновлен
 $_['text_edit']        = 'Змінити доставку Новою Поштою';
 $_['ocnp_text_main_settings'] = 'Головне';
 $_['ocnp_text_api_settings']  = 'API';
+$_['ocnp_text_support_tab']   = 'Підтримка';
 $_['ocnp_text_sync_settings'] = 'Синхронізація';
 $_['ocnp_text_sync_success']  = 'Синхронізація успешно завершена!';
 
