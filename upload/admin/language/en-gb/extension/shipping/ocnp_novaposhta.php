@@ -7,8 +7,11 @@ $_['text_success']     = 'Success: You have modified attributes!';
 $_['text_edit']        = 'Edit delivery Nova Poshta';
 $_['ocnp_text_main_settings'] = 'Main';
 $_['ocnp_text_api_settings']  = 'API';
+$_['ocnp_text_support_tab']   = 'Support';
 $_['ocnp_text_sync_settings'] = 'Synchronization';
 $_['ocnp_text_sync_success']  = 'Synchronization has been finished successfully!';
+$_['ocnp_text_contacts_label'] = 'Contacts';
+$_['ocnp_text_contacts_text'] = 'For all questions related to the add-on, please contact:';
 
 
 /* Sync table on Syncronization tab */
@@ -33,7 +36,6 @@ $_['entry_sort_order'] = 'Sort Order:';
 $_['entry_api_url']    = 'API URL';
 $_['entry_api_key']    = 'API Key';
 $_['ocnp_entry_name']  = 'Name';
-
 
 /* Errors */
 $_['error_permission']          = 'Warning: You do not have permission to modify attributes!';
