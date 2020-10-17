@@ -14,7 +14,7 @@ $_['ocnp_text_contacts_label'] = 'Contacts';
 $_['ocnp_text_contacts_text'] = 'For all questions related to the add-on, please contact:';
 
 $_['ocnp_api_tab_key_link'] = 'The API key can be generated in you account: <a href=\'https://my.novaposhta.ua/settings/index#apikeys\'>API Key</a>';
-$_['ocnp_api_tab_key_instruction'] = 'Detailed instruction how to generate the API key you can find here: <a href=\'https://devcenter.novaposhta.ua/blog/%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-api-%D0%BA%D0%BB%D1%8E%D1%87%D0%B0\'>Instruction</a>';
+$_['ocnp_api_tab_key_instruction'] = 'Detailed instructions how to generate the API key you can find here: <a href=\'https://devcenter.novaposhta.ua/blog/%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-api-%D0%BA%D0%BB%D1%8E%D1%87%D0%B0\'>Instructions</a>';
 
 /* Sync table on Syncronization tab */
 $_['ocnp_text_sync_table_type']  = 'Name';
