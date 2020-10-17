@@ -16,7 +16,6 @@ $_['ocnp_text_contacts_text'] = 'З усіх питань, які пов\'яза
 $_['ocnp_api_tab_key_link'] = 'Ключ можна згенерувати в особистоve кабінеті, за посиланням: <a href=\'https://my.novaposhta.ua/settings/index#apikeys\'>Отримати API Key</a>';
 $_['ocnp_api_tab_key_instruction'] = 'Докладну інструкцію як згенерувати ключ можна знайти за посиланням: <a href=\'https://devcenter.novaposhta.ua/blog/%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-api-%D0%BA%D0%BB%D1%8E%D1%87%D0%B0\'>Інструкція</a>';
 
-
 /* Sync table on Syncronization tab */
 $_['ocnp_text_sync_table_type']  = 'Назва';
 $_['ocnp_text_sync_table_count'] = 'Кількість';
