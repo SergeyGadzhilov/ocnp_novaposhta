@@ -59,21 +59,32 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       $this->updateSync(self::AREAS_TABLE);
    }
 
-   public function addWarehous($warehous)
+   public function addWarehouses($warehouses)
    {
       $sql = "insert into ".self::WAREHOUSES_TABLE."( ";
       $sql .= "SiteKey, Description, DescriptionRu, Ref, Phone, TypeOfWarehouse, ";
-      $sql .= "Number, CityRef, TotalMaxWeightAllowed, PlaceMaxWeightAllowed) values (";
-      $sql .= "'".$warehous['SiteKey']."',";
-      $sql .= "'".$warehous['Description']."',";
-      $sql .= "'".$warehous['DescriptionRu']."',";
-      $sql .= "'".$warehous['Ref']."',";
-      $sql .= "'".$warehous['Phone']."',";
-      $sql .= "'".$warehous['TypeOfWarehouse']."',";
-      $sql .= "'".$warehous['Number']."',";
-      $sql .= "'".$warehous['CityRef']."',";
-      $sql .= "'".$warehous['TotalMaxWeightAllowed']."',";
-      $sql .= "'".$warehous['PlaceMaxWeightAllowed']."');";
+      $sql .= "Number, CityRef, TotalMaxWeightAllowed, PlaceMaxWeightAllowed) values ";
+
+      for ($i = 0; $i < count($warehouses); ++$i)
+      {
+         if ($i > 0)
+         {
+            $sql .= ",";
+         }
+
+         $sql .= "(";
+         $sql .= "'".$this->db->escape($warehouses[$i]['SiteKey'])."',";
+         $sql .= "'".$this->db->escape($warehouses[$i]['Description'])."',";
+         $sql .= "'".$this->db->escape($warehouses[$i]['DescriptionRu'])."',";
+         $sql .= "'".$this->db->escape($warehouses[$i]['Ref'])."',";
+         $sql .= "'".$this->db->escape($warehouses[$i]['Phone'])."',";
+         $sql .= "'".$this->db->escape($warehouses[$i]['TypeOfWarehouse'])."',";
+         $sql .= "'".$this->db->escape($warehouses[$i]['Number'])."',";
+         $sql .= "'".$this->db->escape($warehouses[$i]['CityRef'])."',";
+         $sql .= "'".$this->db->escape($warehouses[$i]['TotalMaxWeightAllowed'])."',";
+         $sql .= "'".$this->db->escape($warehouses[$i]['PlaceMaxWeightAllowed'])."')";
+      }
+      $sql .= ";";
 
       $this->db->query($sql);
    }
@@ -94,16 +105,27 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       $this->db->query($query);
    }
 
-   public function addCity($city)
+   public function addCities($cities)
    {
-      $sql = "insert into ".self::CITIES_TABLE."(Description, DescriptionRu, Ref, Area, CityID) values (";
-      $sql .= "'".$city['Description']."',";
-      $sql .= "'".$city['DescriptionRu']."',";
-      $sql .= "'".$city['Ref']."',";
-      $sql .= "'".$city['Area']."',";
-      $sql .= "'".$city['CityID']."');";
+      $sql = "insert into ".self::CITIES_TABLE."(Description, DescriptionRu, Ref, Area, CityID) values";
 
-      $this->db->query($sql);
+      for($i = 0; $i < count($cities); ++$i)
+      {
+         if ($i > 0){
+            $sql .= ",";
+         }
+
+         $sql .= "\n(";
+         $sql .= "'".$this->db->escape($cities[$i]['Description'])."',";
+         $sql .= "'".$this->db->escape($cities[$i]['DescriptionRu'])."',";
+         $sql .= "'".$this->db->escape($cities[$i]['Ref'])."',";
+         $sql .= "'".$this->db->escape($cities[$i]['Area'])."',";
+         $sql .= "'".$this->db->escape($cities[$i]['CityID'])."')";
+      }
+
+      $sql .= ";";
+
+      return $this->db->query($sql);
    }
 
    public function clearCities()
