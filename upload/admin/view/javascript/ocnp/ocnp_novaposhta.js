@@ -63,8 +63,32 @@ function OCNP_Server(){
          success: function(response){
             showServerMessage(response);
             processResponse(response, callback);
+         },
+         error: function(jqXHR){
+            if (callback.error){
+               callback.error(null);
+            }
+            processComunicationError(jqXHR);
          }
       });
+   }
+
+   function processComunicationError(jqXHR){
+      if (jqXHR.status === 0) {
+         m_console.error('Server connection error.\n Please, verify network connection.');
+      } else if (jqXHR.status == 404) {
+         m_console.error('Requested page not found. [404]');
+      } else if (jqXHR.status == 500) {
+         m_console.error('Internal Server Error [500].');
+      } else if (exception === 'parsererror') {
+         m_console.error('Requested JSON parse failed.');
+      } else if (exception === 'timeout') {
+         m_console.error('Time out error.');
+      } else if (exception === 'abort') {
+         m_console.error('Ajax request aborted.');
+      } else {
+         m_console.error('Uncaught Error.\n' + jqXHR.responseText);
+      }
    }
 
    function processResponse(response, callback){
