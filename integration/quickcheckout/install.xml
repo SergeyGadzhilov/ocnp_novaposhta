@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <code>OCNPNOVAPOSHTA1.0.0.1</code>
+    <name>OCNP Nova Poshta SimpleCheckout integration</name>
+    <version>1.0</version>
+    <author>gadzhilov.sergey@gmail.com</author>
+    <file path="catalog/view/theme/default/template/extension/quickcheckout/shipping_method.twig">
+        <operation>
+            <search><![CDATA[
+            <td><label for="{{ quote.code }}">{{ quote.title }}</label></td>
+            ]]></search>
+            <add position="replace"><![CDATA[
+            <td>
+               <label for="{{ quote.code }}">{{ quote.title }}</label>
+               {% if quote.form is defined %}{{quote.form.show()}}{% endif %}
+            </td>
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            </select><br />
+            ]]></search>
+            <add position="after"><![CDATA[
+               {% for shipping_method in shipping_methods %}
+                  {% if not shipping_method.error %}
+                     {% for quote in shipping_method.quote %}
+                        {% if quote.form is defined %}{{quote.form.show()}}{% endif %}
+                     {% endfor %}
+                  {% endif %}
+               {% endfor %}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            $('#shipping-method input[name=\'shipping_method\'], #shipping-method select[name=\'shipping_method\']').on('change', function() {
+            ]]></search>
+            <add position="before"><![CDATA[
+            $('#shipping-method select[name=\'shipping_method\']').on('change', function(){
+               var area = new OCNP_Select("ocnp_novaposhta_area");
+               if (this.value == 'ocnp_novaposhta.warehouse'){
+                  area.show();
+               }
+               else{
+                  area.hide();
+               }
+            });
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            $('#shipping-method input[name=\'shipping_method\'], #shipping-method select[name=\'shipping_method\']').on('change', function() {
+            ]]></search>
+            <add position="replace"><![CDATA[
+            $('#shipping-method input[name=\'shipping_method\'], #shipping-method select[name=\'shipping_method\'], #ocnp_novaposhta_area, #ocnp_novaposhta_city, #ocnp_novaposhta_warehouse').on('change', function() {
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/extension/quickcheckout/checkout.php">
+        <operation>
+            <search><![CDATA[
+            public function index() {
+            ]]></search>
+            <add position="after"><![CDATA[
+            $this->document->addScript('catalog/view/javascript/ocnp_novaposhta/checkout.js');
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/extension/quickcheckout/shipping_method.php">
+        <operation>
+            <search><![CDATA[
+            public function set() {
+            ]]></search>
+            <add position="before"><![CDATA[
+
+            private function OCNP_getValue($name, $address_name)
+            {
+               $value = $this->session->data['shipping_address'][$address_name];
+
+               if (isset($this->request->post[$name]))
+               {
+                  $value = $this->request->post[$name];
+               }
+
+               return $value;
+            }
+
+            private function OCNP_updateShippingAddress()
+            {
+               if ($this->request->post['shipping_method'] == 'ocnp_novaposhta.warehouse')
+               {
+                  $this->session->data['shipping_address']['zone'] = $this->OCNP_getValue('ocnp_novaposhta_area', 'zone');
+                  $this->session->data['shipping_address']['city'] = $this->OCNP_getValue('ocnp_novaposhta_city', 'city');
+                  $this->session->data['shipping_address']['address_1'] = $this->OCNP_getValue('ocnp_novaposhta_warehouse', 'address_1');
+               }
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            $this->session->data['shipping_address'] = $shipping_address;
+            ]]></search>
+            <add position="after"><![CDATA[
+            $this->OCNP_updateShippingAddress();
+            ]]></add>
+        </operation>
+    </file>
+</modification>
