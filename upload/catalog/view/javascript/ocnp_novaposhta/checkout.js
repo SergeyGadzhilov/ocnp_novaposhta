@@ -96,7 +96,7 @@ function OCNP_City(){
    function setCities(cities){
       m_control.clear();
 
-      for (i = 1; i < cities.length; ++i){
+      for (i = 0; i < cities.length; ++i){
          var option = document.createElement('option');
          option.id = cities[i].Ref;
          option.value = cities[i].Description;
@@ -143,7 +143,7 @@ function OCNP_Warehouse(){
    function setCities(warehouses){
       m_control.clear();
 
-      for (i = 1; i < warehouses.length; ++i){
+      for (i = 0; i < warehouses.length; ++i){
          var option = document.createElement('option');
          option.id = warehouses[i].Ref;
          option.value = warehouses[i].Description;
@@ -184,6 +184,6 @@ function OCNP_ShowCity(){
 function OCNP_ShowWarehouse(){
    var city = new OCNP_Select("ocnp_novaposhta_city");
    var warehouse = new OCNP_Warehouse();
-   
+
    warehouse.show(city.getSelectedID());
 }
