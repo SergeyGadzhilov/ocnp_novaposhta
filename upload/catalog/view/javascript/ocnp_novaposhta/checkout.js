@@ -140,7 +140,13 @@ function OCNP_Warehouse(){
       }
    }
 
-   function setCities(warehouses){
+   self.hide = function(){
+      if (m_control){
+         m_control.hide();
+      }
+   }
+
+   function setWarehouses(warehouses){
       m_control.clear();
 
       for (i = 0; i < warehouses.length; ++i){
@@ -160,7 +166,7 @@ function OCNP_Warehouse(){
       server.sendRequest(new OCNP_Request('getWarehouses', data),{
             'success': function(response){
                if (response.warehouses.length > 0){
-                  setCities(response.warehouses)
+                  setWarehouses(response.warehouses)
                   m_control.show();
                }
                else{
@@ -177,7 +183,9 @@ function OCNP_Warehouse(){
 function OCNP_ShowCity(){
    var area = new OCNP_Select("ocnp_novaposhta_area");
    var city = new OCNP_City();
+   var warehouse = new OCNP_Warehouse();
 
+   warehouse.hide();
    city.show(area.getSelectedID());
 }
 
