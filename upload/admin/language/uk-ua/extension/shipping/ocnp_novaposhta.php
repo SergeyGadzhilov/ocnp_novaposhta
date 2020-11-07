@@ -11,6 +11,7 @@ $_['ocnp_text_support_tab']   = 'Підтримка';
 $_['ocnp_text_sync_settings'] = 'Синхронізація';
 $_['ocnp_text_sync_success']  = 'Синхронізація успешно завершена!';
 $_['ocnp_text_contacts_label'] = 'Контакти';
+$_['ocnp_text_documentation_label'] = 'Документація';
 $_['ocnp_text_contacts_text'] = 'З усіх питань, які пов\'язані з роботою доповнення звертайтеся за адресою:';
 
 $_['ocnp_api_tab_key_link'] = 'Ключ можна згенерувати в особистому кабінеті, за посиланням: <a href=\'https://my.novaposhta.ua/settings/index#apikeys\'>Отримати API Key</a>';

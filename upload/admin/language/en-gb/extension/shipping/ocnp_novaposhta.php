@@ -11,6 +11,7 @@ $_['ocnp_text_support_tab']   = 'Support';
 $_['ocnp_text_sync_settings'] = 'Synchronization';
 $_['ocnp_text_sync_success']  = 'Synchronization has been finished successfully!';
 $_['ocnp_text_contacts_label'] = 'Contacts';
+$_['ocnp_text_documentation_label'] = 'Documentation';
 $_['ocnp_text_contacts_text'] = 'For all questions related to the add-on, please contact:';
 
 $_['ocnp_api_tab_key_link'] = 'The API key can be generated in you account: <a href=\'https://my.novaposhta.ua/settings/index#apikeys\'>API Key</a>';
