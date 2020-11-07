@@ -27,7 +27,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          'success' => true,
          'timestamp' => "",
          'count' => 0,
-         'message' => $this->language->get('ocnp_text_sync_success')
+         'message' => $this->language->get('ocnp_text_sync_success_warehouses')
       );
 
       $this->load->model(self::EXTENSION_PATH);
@@ -62,7 +62,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          'success' => true,
          'timestamp' => "",
          'count' => 0,
-         'message' => $this->language->get('ocnp_text_sync_success')
+         'message' => $this->language->get('ocnp_text_sync_success_areas')
       );
 
       $this->load->model(self::EXTENSION_PATH);
@@ -99,7 +99,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          'success' => true,
          'timestamp' => "",
          'count' => 0,
-         'message' => $this->language->get('ocnp_text_sync_success')
+         'message' => $this->language->get('ocnp_text_sync_success_cities')
       );
 
       $this->load->model(self::EXTENSION_PATH);

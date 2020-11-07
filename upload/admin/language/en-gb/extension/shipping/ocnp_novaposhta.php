@@ -9,7 +9,13 @@ $_['ocnp_text_main_settings'] = 'Main';
 $_['ocnp_text_api_settings']  = 'API';
 $_['ocnp_text_support_tab']   = 'Support';
 $_['ocnp_text_sync_settings'] = 'Synchronization';
-$_['ocnp_text_sync_success']  = 'Synchronization has been finished successfully!';
+
+//Sync messages
+$_['ocnp_text_sync_success_areas']  = 'Areas synchronization has been finished successfully!';
+$_['ocnp_text_sync_success_cities']  = 'Cities synchronization has been finished successfully!';
+$_['ocnp_text_sync_success_warehouses']  = 'Warehouses synchronization has been finished successfully!';
+
+//Support tab
 $_['ocnp_text_contacts_label'] = 'Contacts';
 $_['ocnp_text_documentation_label'] = 'Documentation';
 $_['ocnp_text_contacts_text'] = 'For all questions related to the add-on, please contact:';

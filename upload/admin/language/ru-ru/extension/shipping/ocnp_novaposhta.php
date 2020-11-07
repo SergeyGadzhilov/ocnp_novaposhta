@@ -9,7 +9,13 @@ $_['ocnp_text_main_settings'] = 'Главное';
 $_['ocnp_text_api_settings'] = 'API';
 $_['ocnp_text_support_tab']  = 'Поддержка';
 $_['ocnp_text_sync_settings'] = 'Синхронизация';
-$_['ocnp_text_sync_success']  = 'Синхронізація успішно завершена!';
+
+//Sync messages
+$_['ocnp_text_sync_success_areas']  = 'Синхронизация областей успешно завершена!';
+$_['ocnp_text_sync_success_cities']  = 'Синхронизация городов успешно завершена!';
+$_['ocnp_text_sync_success_warehouses']  = 'Синхронизация отделений успешно завершена!';
+
+
 $_['ocnp_text_contacts_label'] = 'Контакты';
 $_['ocnp_text_documentation_label'] = 'Документация';
 $_['ocnp_text_contacts_text'] = 'По всем вопросам, которые связаны с работой дополнения обращайтесь по адресу:';
