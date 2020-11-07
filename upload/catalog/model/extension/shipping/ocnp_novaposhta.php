@@ -67,22 +67,39 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    public function getCitiesByAreaID($area)
    {
       $query = $this->db->query("SELECT * FROM ".self::CITIES_TABLE." WHERE Area = '".$area."'");
+      $this->updateDescriptions($query->rows);
       return $query->rows;
    }
 
-   public function getWarehousesByCityID($city){
+   public function getWarehousesByCityID($city)
+   {
       $query = $this->db->query("SELECT * FROM ".self::WAREHOUSES_TABLE." WHERE CityRef = '".$city."'");
+      $this->updateDescriptions($query->rows);
+
       return $query->rows;
    }
 
    private function getAreas()
    {
       $query = $this->db->query("SELECT * FROM ".self::AREAS_TABLE);
+      $this->updateDescriptions($query->rows);
+
       return $query->rows;
    }
 
    private function settingName($setting)
    {
       return self::MODULE_NAME.'_'.$setting;
+   }
+
+   private function updateDescriptions(&$rows)
+   {
+      if ($this->language->get('code') == 'ru')
+      {
+         foreach($rows as &$row)
+         {
+            $row['Description'] = $row['DescriptionRu'];
+         }
+      }
    }
 }
