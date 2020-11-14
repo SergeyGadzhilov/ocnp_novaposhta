@@ -5,8 +5,6 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    const AREAS_TABLE = DB_PREFIX . 'ocnp_novaposhta_areas';
    const SYNC_TABLE = DB_PREFIX. 'ocnp_novaposhta_sync';
    const WAREHOUSES_TABLE = DB_PREFIX. 'ocnp_novaposhta_warehouses';
-   const EXTENSION_PATH = 'extension/shipping/ocnp_novaposhta';
-
 
    public function getAreasFromApi()
    {
@@ -144,21 +142,10 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       return $query->row['records_count'];
    }
 
-   private function getApiUrl()
-   {
-      $url = "https://api.novaposhta.ua/v2.0/json/";
-
-      if ($this->config->get("shipping_ocnp_novaposhta_api_url"))
-      {
-         $url = $this->config->get("shipping_ocnp_novaposhta_api_url");
-      }
-
-      return $url;
-   }
-
    private function sendRequest($request)
    {
-      $request["apiKey"] = $this->config->get('shipping_ocnp_novaposhta_api_key');
+      $this->load->library('ocnp/novaposhta/OCNPNovaPoshtaSettings');
+      $request["apiKey"] = $this->OCNPNovaPoshtaSettings->get('api_key');
       if ($request["apiKey"])
       {
          $conection = curl_init();
@@ -167,7 +154,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
          curl_setopt($conection, CURLOPT_HEADER, 0);
          curl_setopt($conection, CURLOPT_SSL_VERIFYPEER, 0);
          curl_setopt($conection, CURLOPT_RETURNTRANSFER, 1);
-         curl_setopt($conection, CURLOPT_URL, $this->getApiUrl());
+         curl_setopt($conection, CURLOPT_URL, $this->OCNPNovaPoshtaSettings->get('api_url'));
          curl_setopt($conection, CURLOPT_HTTPHEADER, Array("Content-Type: text/plain"));
          curl_setopt($conection, CURLOPT_POSTFIELDS, json_encode($request));
 
@@ -177,7 +164,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       }
       else
       {
-         $this->load->language(self::EXTENSION_PATH);
+         $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
          $response = array(
             "success" => false,
             "errors" => array($this->language->get("error_api_key"))

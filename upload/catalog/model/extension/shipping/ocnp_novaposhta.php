@@ -27,15 +27,16 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function getQuote($address)
    {
-      if ($this->config->get($this->settingName('status')))
+      $this->load->library('ocnp/novaposhta/OCNPNovaPoshtaSettings');
+      if ($this->OCNPNovaPoshtaSettings->get('status'))
       {
          $this->load->language(self::MODULE_PATH);
-         $title = $this->config->get($this->settingName('name'));
+         $title = $this->OCNPNovaPoshtaSettings->get('name');
 
          $this->m_data = array(
             'code' => self::MODULE_NAME,
             'title' => $title[$this->config->get('config_language_id')],
-            'sort_order' => $this->config->get($this->settingName('sort_order')),
+            'sort_order' => $this->OCNPNovaPoshtaSettings->get('sort_order'),
             'error' => FALSE,
             'quote' => array()
          );
@@ -57,10 +58,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    private function getForm()
    {
-      $data = array(
-         'areas'  => $this->getAreas()
-      );
-
+      $data = array('areas' => $this->getAreas());
       return new OCNPNovaPoshtaForm($this->load->view(self::MODULE_PATH, $data));
    }
 
@@ -85,11 +83,6 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       $this->updateDescriptions($query->rows);
 
       return $query->rows;
-   }
-
-   private function settingName($setting)
-   {
-      return self::MODULE_NAME.'_'.$setting;
    }
 
    private function updateDescriptions(&$rows)

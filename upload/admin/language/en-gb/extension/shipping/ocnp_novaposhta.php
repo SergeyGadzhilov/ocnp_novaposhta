@@ -48,5 +48,5 @@ $_['ocnp_entry_name']  = 'Name';
 
 /* Errors */
 $_['error_permission']          = 'Warning: You do not have permission to modify attributes!';
-$_['error_api_url']    = 'The field "API URL" is required field!';
-$_['error_api_key']    = 'The field "API Key" is required field!';
+$_['text_error_api_url']    = 'The field "API URL" is required field!';
+$_['text_error_api_key']    = 'The field "API Key" is required field!';

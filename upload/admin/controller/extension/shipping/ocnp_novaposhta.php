@@ -2,26 +2,32 @@
 
 class ControllerExtensionShippingOcnpNovaposhta extends Controller
 {
-   const EXTENSION_NAME = 'shipping_ocnp_novaposhta';
-   const EXTENSION_PATH = 'extension/shipping/ocnp_novaposhta';
    private $m_data = array();
+
+   public function __construct($register)
+   {
+      parent::__construct($register);
+      $this->load->library('ocnp/novaposhta/OCNPNovaPoshtaSettings');
+   }
 
    public function install()
    {
-      $this->load->model(self::EXTENSION_PATH);
+      $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
       $this->model_extension_shipping_ocnp_novaposhta->install();
    }
 
    public function uninstall()
    {
-      $this->load->model(self::EXTENSION_PATH);
+      $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
       $this->model_extension_shipping_ocnp_novaposhta->uninstall();
    }
 
    public function syncWarehouses()
    {
-      $this->saveSettings();
-      $this->load->language(self::EXTENSION_PATH);
+      $this->OCNPNovaPoshtaSettings->setSettings($this->request->post);
+      $this->OCNPNovaPoshtaSettings->saveSettings();
+
+      $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
 
       $respose = array(
          'success' => true,
@@ -30,7 +36,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          'message' => $this->language->get('ocnp_text_sync_success_warehouses')
       );
 
-      $this->load->model(self::EXTENSION_PATH);
+      $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
       $model = $this->model_extension_shipping_ocnp_novaposhta;
 
       $warehouses = $model->getWarehousesFromApi();
@@ -55,8 +61,9 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
 
    public function syncAreas()
    {
-      $this->saveSettings();
-      $this->load->language(self::EXTENSION_PATH);
+      $this->OCNPNovaPoshtaSettings->setSettings($this->request->post);
+      $this->OCNPNovaPoshtaSettings->saveSettings();
+      $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
 
       $respose = array(
          'success' => true,
@@ -65,7 +72,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          'message' => $this->language->get('ocnp_text_sync_success_areas')
       );
 
-      $this->load->model(self::EXTENSION_PATH);
+      $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
 
       $areas = $this->model_extension_shipping_ocnp_novaposhta->getAreasFromApi();
       if ($areas["success"])
@@ -92,8 +99,9 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
 
    public function syncCities()
    {
-      $this->saveSettings();
-      $this->load->language(self::EXTENSION_PATH);
+      $this->OCNPNovaPoshtaSettings->setSettings($this->request->post);
+      $this->OCNPNovaPoshtaSettings->saveSettings();
+      $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
 
       $respose = array(
          'success' => true,
@@ -102,7 +110,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          'message' => $this->language->get('ocnp_text_sync_success_cities')
       );
 
-      $this->load->model(self::EXTENSION_PATH);
+      $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
       $model = $this->model_extension_shipping_ocnp_novaposhta;
 
       $cities = $model->getCitiesFromApi();
@@ -127,7 +135,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
 
    private function loadResources()
    {
-      $this->load->language(self::EXTENSION_PATH);
+      $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
       $this->document->addScript('view/javascript/ocnp/ocnp_novaposhta.js?19');
 
       $this->document->setTitle($this->language->get('heading_title'));
@@ -156,59 +164,9 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       );
 
       $this->m_data['breadcrumbs'][] = array(
-         'href' => $this->getLink(self::EXTENSION_PATH),
+         'href' => $this->getLink($this->OCNPNovaPoshtaSettings->get('extension_path')),
          'text' => $this->language->get('heading_title')
       );
-   }
-
-   private function settingName($setting)
-   {
-      return self::EXTENSION_NAME.'_'.$setting;
-   }
-
-   private function loadLanguageSpecificSettings($settings)
-   {
-      $this->load->model('localisation/language');
-      $languages = $this->model_localisation_language->getLanguages();
-
-      $names = array();
-      foreach($languages as $language)
-      {
-         $translation = new Language($language['code']);
-         $translation->load(self::EXTENSION_PATH);
-         $names[$language['language_id']] = $translation->get('heading_title');
-      }
-      $settings[$this->settingName('name')] = $names;
-
-      return $settings;
-   }
-
-   private function loadSettings()
-   {
-      $settings = array(
-         $this->settingName('status') => '0',
-         $this->settingName('api_url') => 'https://api.novaposhta.ua/v2.0/json/',
-         $this->settingName('api_key') => '',
-         $this->settingName('sort_order') => '0'
-      );
-
-      $settings = $this->loadLanguageSpecificSettings($settings);
-
-      foreach($settings as $setting => $defaultValue)
-      {
-         $value = $this->config->get($setting);
-         if (isset($this->request->post[$setting]))
-         {
-            $value = $this->request->post[$setting];
-         }
-
-         if (empty($value))
-         {
-            $value = $defaultValue;
-         }
-
-         $this->m_data[$setting] = $value;
-      }
    }
 
    private function getLink($route)
@@ -216,41 +174,35 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       return HTTPS_SERVER."index.php?route=".$route."&user_token=".$this->session->data['user_token'];
    }
 
-   private function saveSettings()
-   {
-      $this->load->model('setting/setting');
-      $this->model_setting_setting->editSetting(self::EXTENSION_NAME, $this->request->post);
-      $this->config->set('shipping_ocnp_novaposhta_api_key', $this->request->post['shipping_ocnp_novaposhta_api_key']);
-   }
-
    public function index()
    {
       $this->loadResources();
+      $this->OCNPNovaPoshtaSettings->setSettings($this->request->post);
       if ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->validate())
       {
-         $this->saveSettings();
+         $this->OCNPNovaPoshtaSettings->saveSettings();
          $this->session->data['success'] = $this->language->get('text_success');
          $this->response->redirect($this->getLink('marketplace/extension'));
       }
       else
       {
          $this->setBreadcrumbs();
-         $this->loadSettings();
          $this->setSyncTableInfo();
 
+         $this->m_data = array_merge($this->m_data, $this->OCNPNovaPoshtaSettings->getSettings());
          $this->m_data['languages'] = $this->model_localisation_language->getLanguages();
-         $this->m_data['action'] = $this->getLink(self::EXTENSION_PATH);
+         $this->m_data['action'] = $this->getLink($this->OCNPNovaPoshtaSettings->get('extension_path'));
          $this->m_data['cancel'] = $this->getLink('marketplace/extension');
          $this->m_data['header'] = $this->load->controller('common/header');
          $this->m_data['column_left'] = $this->load->controller('common/column_left');
          $this->m_data['footer'] = $this->load->controller('common/footer');
-         $this->response->setOutput($this->load->view(self::EXTENSION_PATH, $this->m_data));
+         $this->response->setOutput($this->load->view($this->OCNPNovaPoshtaSettings->get('extension_path'), $this->m_data));
       }
    }
 
    private function setSyncTableInfo()
    {
-      $this->load->model(self::EXTENSION_PATH);
+      $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
       $cities = $this->model_extension_shipping_ocnp_novaposhta->getCitiesTableInfo();
       $this->m_data['ocnp_sync_table_cities_timestamp'] = $cities['Timestamp'];
       $this->m_data['ocnp_sync_table_cities_count'] = $cities['RecordsCount'];
@@ -268,7 +220,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    {
       $IsValid = true;
 
-      if (!$this->user->hasPermission('modify', self::EXTENSION_PATH))
+      if (!$this->user->hasPermission('modify', $this->OCNPNovaPoshtaSettings->get('extension_path')))
       {
          $this->m_data['warning'] = $this->language->get('error_permission');
          $IsValid = false;
@@ -282,10 +234,9 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
 
          foreach($RequiredFields as $field)
          {
-            $name = $this->settingName($field);
-            if (empty($this->request->post[$name]))
+            if (empty($this->OCNPNovaPoshtaSettings->get($field)))
             {
-               $this->m_data['error_'.$name] = $this->language->get('error_'.$field);
+               $this->m_data['error_'.$field] = $this->language->get('error_'.$field);
                $IsValid = false;
             }
          }

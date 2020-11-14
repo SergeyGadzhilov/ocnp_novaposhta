@@ -47,5 +47,5 @@ $_['ocnp_entry_name']  = 'Назва';
 
 /* Errors */
 $_['error_permission'] = 'У Вас немає прав для керування цим модулем!';
-$_['error_api_url']    = 'Поле "API URL" обов`язкове!';
-$_['error_api_key']    = 'Поле "API Ключ" обов`язкове!';
+$_['text_error_api_url']    = 'Поле "API URL" обов`язкове!';
+$_['text_error_api_key']    = 'Поле "API Ключ" обов`язкове!';
