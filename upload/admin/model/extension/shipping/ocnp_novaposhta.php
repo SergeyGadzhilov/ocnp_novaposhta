@@ -1,10 +1,10 @@
 <?php
 class ModelExtensionShippingOcnpNovaposhta extends Model {
 
-   const CITIES_TABLE = DB_PREFIX . 'ocnp_novaposhta_cities';
-   const AREAS_TABLE = DB_PREFIX . 'ocnp_novaposhta_areas';
-   const SYNC_TABLE = DB_PREFIX. 'ocnp_novaposhta_sync';
-   const WAREHOUSES_TABLE = DB_PREFIX. 'ocnp_novaposhta_warehouses';
+   const CITIES_TABLE = 'ocnp_novaposhta_cities';
+   const AREAS_TABLE = 'ocnp_novaposhta_areas';
+   const SYNC_TABLE = 'ocnp_novaposhta_sync';
+   const WAREHOUSES_TABLE = 'ocnp_novaposhta_warehouses';
 
    public function getAreasFromApi()
    {
@@ -38,7 +38,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function addArea($area)
    {
-      $sql = "insert into ".self::AREAS_TABLE."(Description, DescriptionRu, Ref, AreasCenter) values (";
+      $sql = "insert into ".DB_PREFIX.self::AREAS_TABLE."(Description, DescriptionRu, Ref, AreasCenter) values (";
       $sql .= "'".$area['Description']."',";
       $sql .= "'".$area['DescriptionRu']."',";
       $sql .= "'".$area['Ref']."',";
@@ -59,7 +59,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function addWarehouses($warehouses)
    {
-      $sql = "insert into ".self::WAREHOUSES_TABLE."( ";
+      $sql = "insert into ".DB_PREFIX.self::WAREHOUSES_TABLE."( ";
       $sql .= "SiteKey, Description, DescriptionRu, Ref, Phone, TypeOfWarehouse, ";
       $sql .= "Number, CityRef, TotalMaxWeightAllowed, PlaceMaxWeightAllowed) values ";
 
@@ -99,13 +99,13 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    private function clearTable($Table)
    {
-      $query = "truncate ".$Table;
+      $query = "truncate ".DB_PREFIX.$Table;
       $this->db->query($query);
    }
 
    public function addCities($cities)
    {
-      $sql = "insert into ".self::CITIES_TABLE."(Description, DescriptionRu, Ref, Area, CityID) values";
+      $sql = "insert into ".DB_PREFIX.self::CITIES_TABLE."(Description, DescriptionRu, Ref, Area, CityID) values";
 
       for($i = 0; $i < count($cities); ++$i)
       {
@@ -138,7 +138,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    private function getRecordsCount($TableName)
    {
-      $query = $this->db->query("select count(*) records_count from ".$TableName.";");
+      $query = $this->db->query("select count(*) records_count from ".DB_PREFIX.$TableName.";");
       return $query->row['records_count'];
    }
 
@@ -191,7 +191,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function install()
    {
-      $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::CITIES_TABLE ."` (
+      $this->db->query("CREATE TABLE IF NOT EXISTS `" .DB_PREFIX.self::CITIES_TABLE ."` (
          `AA_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
          `Description` VARCHAR(250) NOT NULL,
          `DescriptionRu` VARCHAR(250) NOT NULL,
@@ -200,14 +200,14 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
          `CityID` INT UNSIGNED
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
 
-      $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::SYNC_TABLE ."` (
+      $this->db->query("CREATE TABLE IF NOT EXISTS `" .DB_PREFIX.self::SYNC_TABLE ."` (
          `AA_ID`         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
          `TableName`     VARCHAR(50) NOT NULL,
          `RecordsCount`  INT(30) UNSIGNED,
          `Timestamp`     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
 
-      $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::AREAS_TABLE ."` (
+      $this->db->query("CREATE TABLE IF NOT EXISTS `" .DB_PREFIX.self::AREAS_TABLE ."` (
          `AA_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
          `Description` VARCHAR(250) NOT NULL,
          `DescriptionRu` VARCHAR(250) NOT NULL,
@@ -215,7 +215,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
          `AreasCenter` VARCHAR(36) NOT NULL
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
 
-      $this->db->query("CREATE TABLE IF NOT EXISTS `" . self::WAREHOUSES_TABLE ."` (
+      $this->db->query("CREATE TABLE IF NOT EXISTS `" .DB_PREFIX.self::WAREHOUSES_TABLE ."` (
          `AA_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
          `SiteKey` VARCHAR(36) NOT NULL,
          `Description` VARCHAR(250) NOT NULL,
@@ -242,27 +242,27 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
       foreach($sync_tales as $table)
       {
-         $this->db->query("insert into ".self::SYNC_TABLE."(TableName, RecordsCount) values ('".$table."', 0);");
+         $this->db->query("insert into ".DB_PREFIX.self::SYNC_TABLE."(TableName, RecordsCount) values ('".DB_PREFIX.$table."', 0);");
       }
    }
 
    private function updateSync($TableName)
    {
       $RecordsCount = $this->getRecordsCount($TableName);
-      $this->db->query("update ".self::SYNC_TABLE." set RecordsCount = ".$RecordsCount.", Timestamp = CURRENT_TIMESTAMP where TableName = '".$TableName."';");
+      $this->db->query("update ".DB_PREFIX.self::SYNC_TABLE." set RecordsCount = ".$RecordsCount.", Timestamp = CURRENT_TIMESTAMP where TableName = '".DB_PREFIX.$TableName."';");
    }
 
    private function getSync($TableName)
    {
-      $query = $this->db->query("select * from ".self::SYNC_TABLE." where TableName = '".$TableName."'");
+      $query = $this->db->query("select * from ".DB_PREFIX.self::SYNC_TABLE." where TableName = '".DB_PREFIX.$TableName."'");
       return $query->row;
    }
 
    public function uninstall()
    {
-      $this->db->query("DROP TABLE IF EXISTS `" . self::CITIES_TABLE."` ;");
-      $this->db->query("DROP TABLE IF EXISTS `" . self::AREAS_TABLE."` ;");
-      $this->db->query("DROP TABLE IF EXISTS `" . self::SYNC_TABLE."` ;");
-      $this->db->query("DROP TABLE IF EXISTS `" . self::WAREHOUSES_TABLE."` ;");
+      $this->db->query("DROP TABLE IF EXISTS `" .DB_PREFIX.self::CITIES_TABLE."` ;");
+      $this->db->query("DROP TABLE IF EXISTS `" .DB_PREFIX.self::AREAS_TABLE."` ;");
+      $this->db->query("DROP TABLE IF EXISTS `" .DB_PREFIX.self::SYNC_TABLE."` ;");
+      $this->db->query("DROP TABLE IF EXISTS `" .DB_PREFIX.self::WAREHOUSES_TABLE."` ;");
    }
 }
