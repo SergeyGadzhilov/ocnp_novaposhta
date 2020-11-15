@@ -11,7 +11,8 @@ class OCNPNovaPoshtaSettings extends \Controller
       'status' => '0',
       'api_url' => 'https://api.novaposhta.ua/v2.0/json/',
       'api_key' => '',
-      'sort_order' => '0'
+      'sort_order' => '0',
+      'fixed_price' => 0
    );
 
    public function __construct($registry)
@@ -93,7 +94,6 @@ class OCNPNovaPoshtaSettings extends \Controller
 
    public function getSettings()
    {
-      var_dump($this->m_settings);
       return $this->m_settings;
    }
 

@@ -45,9 +45,9 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
             'warehouse' => array(
                'code' => 'ocnp_novaposhta.warehouse',
                'title' => $title[$this->config->get('config_language_id')],
-               'cost' => 0,
+               'cost' => $this->OCNPNovaPoshtaSettings->get('fixed_price'),
                'tax_class_id' => 0,
-               'text' => '',
+               'text' => $this->OCNPNovaPoshtaSettings->get('fixed_price'),
                'form' => $this->getForm()
             )
          );

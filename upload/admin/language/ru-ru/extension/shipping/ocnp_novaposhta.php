@@ -7,6 +7,7 @@ $_['text_success']     = 'Настройки модуля обновлены!';
 $_['text_edit']        = 'Изменить доставку Новой Почтой';
 $_['ocnp_text_main_settings'] = 'Главное';
 $_['ocnp_text_api_settings'] = 'API';
+$_['ocnp_text_cost_settings'] = 'Стоимость';
 $_['ocnp_text_support_tab']  = 'Поддержка';
 $_['ocnp_text_sync_settings'] = 'Синхронизация';
 
@@ -46,6 +47,7 @@ $_['entry_sort_order'] = 'Порядок сортировки:';
 $_['entry_api_url']    = 'URL-адрес API';
 $_['entry_api_key']    = 'Ваш ключ API';
 $_['ocnp_entry_name']  = 'Название';
+$_['entry_fixed_price'] = 'Фиксированая стоимость';
 
 /* Errors */
 $_['error_permission'] = 'У Вас нет прав для управления этим модулем!';

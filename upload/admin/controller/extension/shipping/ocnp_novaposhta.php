@@ -144,8 +144,6 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $this->m_data['text_enabled'] = $this->language->get('text_enabled');
       $this->m_data['text_disabled'] = $this->language->get('text_disabled');
       $this->m_data['entry_status'] = $this->language->get('entry_status');
-      $this->m_data['ocnp_entry_api_url'] = $this->language->get('entry_api_url');
-      $this->m_data['ocnp_entry_api_key'] = $this->language->get('entry_api_key');
       $this->m_data['ocnp_entry_sort_order'] = $this->language->get('entry_sort_order');
       $this->m_data['button_save'] = $this->language->get('button_save');
       $this->m_data['button_cancel'] = $this->language->get('button_cancel');

@@ -167,7 +167,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
          $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
          $response = array(
             "success" => false,
-            "errors" => array($this->language->get("error_api_key"))
+            "errors" => array($this->language->get("text_error_api_key"))
          );
       }
 

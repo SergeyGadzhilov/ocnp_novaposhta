@@ -7,6 +7,7 @@ $_['text_success']     = 'Success: You have modified attributes!';
 $_['text_edit']        = 'Edit delivery Nova Poshta';
 $_['ocnp_text_main_settings'] = 'Main';
 $_['ocnp_text_api_settings']  = 'API';
+$_['ocnp_text_cost_settings'] = 'Cost';
 $_['ocnp_text_support_tab']   = 'Support';
 $_['ocnp_text_sync_settings'] = 'Synchronization';
 
@@ -40,11 +41,12 @@ $_['ocnp_text_sync_table_warehouses']  = 'Warehouses';
 $_['ocnp_text_sync_table_warehouses_desc']  = 'Sync warehouses.<br>(It is recommended to update once a day)';
 
 /* Entry */
-$_['entry_status']     = 'Status:';
-$_['entry_sort_order'] = 'Sort Order:';
-$_['entry_api_url']    = 'API URL';
-$_['entry_api_key']    = 'API Key';
-$_['ocnp_entry_name']  = 'Name';
+$_['entry_status']      = 'Status:';
+$_['entry_sort_order']  = 'Sort Order:';
+$_['entry_api_url']     = 'API URL';
+$_['entry_api_key']     = 'API Key';
+$_['ocnp_entry_name']   = 'Name';
+$_['entry_fixed_price'] = 'Fixed price';
 
 /* Errors */
 $_['error_permission']          = 'Warning: You do not have permission to modify attributes!';
