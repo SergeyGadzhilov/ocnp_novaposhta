@@ -19,9 +19,9 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    const MODULE_NAME = 'shipping_ocnp_novaposhta';
    const MODULE_PATH = 'extension/shipping/ocnp_novaposhta';
-   const CITIES_TABLE = DB_PREFIX . 'ocnp_novaposhta_cities';
-   const AREAS_TABLE = DB_PREFIX . 'ocnp_novaposhta_areas';
-   const WAREHOUSES_TABLE = DB_PREFIX. 'ocnp_novaposhta_warehouses';
+   const CITIES_TABLE = 'ocnp_novaposhta_cities';
+   const AREAS_TABLE =  'ocnp_novaposhta_areas';
+   const WAREHOUSES_TABLE = 'ocnp_novaposhta_warehouses';
 
    private $m_data = array();
 
@@ -66,14 +66,14 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function getCitiesByAreaID($area)
    {
-      $query = $this->db->query("SELECT * FROM ".self::CITIES_TABLE." WHERE Area = '".$area."'");
+      $query = $this->db->query("SELECT * FROM ".DB_PREFIX.self::CITIES_TABLE." WHERE Area = '".$area."'");
       $this->updateDescriptions($query->rows);
       return $query->rows;
    }
 
    public function getWarehousesByCityID($city)
    {
-      $query = $this->db->query("SELECT * FROM ".self::WAREHOUSES_TABLE." WHERE CityRef = '".$city."'");
+      $query = $this->db->query("SELECT * FROM ".DB_PREFIX.self::WAREHOUSES_TABLE." WHERE CityRef = '".$city."'");
       $this->updateDescriptions($query->rows);
 
       return $query->rows;
@@ -81,7 +81,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    private function getAreas()
    {
-      $query = $this->db->query("SELECT * FROM ".self::AREAS_TABLE);
+      $query = $this->db->query("SELECT * FROM ".DB_PREFIX.self::AREAS_TABLE);
       $this->updateDescriptions($query->rows);
 
       return $query->rows;
