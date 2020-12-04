@@ -47,6 +47,7 @@ $_['entry_api_url']     = 'API URL';
 $_['entry_api_key']     = 'API Key';
 $_['ocnp_entry_name']   = 'Name';
 $_['entry_fixed_price'] = 'Fixed price';
+$_['entry_free_delivery'] = 'Free delivery from';
 
 /* Errors */
 $_['error_permission']          = 'Warning: You do not have permission to modify attributes!';

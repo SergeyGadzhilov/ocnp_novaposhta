@@ -157,7 +157,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
             curl_setopt($conection, CURLOPT_HEADER, 0);
             curl_setopt($conection, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt($conection, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($conection, CURLOPT_URL, $this->getApiUrl());
+            curl_setopt($conection, CURLOPT_URL, $this->OCNPNovaPoshtaSettings->get('api_url'));
             curl_setopt($conection, CURLOPT_HTTPHEADER, Array("Content-Type: text/plain"));
             curl_setopt($conection, CURLOPT_POSTFIELDS, json_encode($request));
    

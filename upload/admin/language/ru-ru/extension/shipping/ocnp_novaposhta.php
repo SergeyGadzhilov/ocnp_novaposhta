@@ -48,6 +48,7 @@ $_['entry_api_url']    = 'URL-адрес API';
 $_['entry_api_key']    = 'Ваш ключ API';
 $_['ocnp_entry_name']  = 'Название';
 $_['entry_fixed_price'] = 'Фиксированая стоимость';
+$_['entry_free_delivery'] = 'Бесплатная доставка от';
 
 /* Errors */
 $_['error_permission'] = 'У Вас нет прав для управления этим модулем!';

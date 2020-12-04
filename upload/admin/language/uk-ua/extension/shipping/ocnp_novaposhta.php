@@ -46,6 +46,7 @@ $_['entry_api_url']    = 'API URL';
 $_['entry_api_key']    = 'API Ключ ';
 $_['ocnp_entry_name']  = 'Назва';
 $_['entry_fixed_price'] = 'Фіксована вартість';
+$_['entry_free_delivery'] = 'Безкоштовна доставка від';
 
 /* Errors */
 $_['error_permission'] = 'У Вас немає прав для керування цим модулем!';
