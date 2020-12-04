@@ -64,16 +64,16 @@ function OCNP_Server(){
             showServerMessage(response);
             processResponse(response, callback);
          },
-         error: function(jqXHR){
+         error: function(jqXHR, exception){
             if (callback.error){
                callback.error(null);
             }
-            processComunicationError(jqXHR);
+            processComunicationError(jqXHR, exception);
          }
       });
    }
 
-   function processComunicationError(jqXHR){
+   function processComunicationError(jqXHR, exception){
       if (jqXHR.status === 0) {
          m_console.error('Server connection error.\n Please, verify network connection.');
       } else if (jqXHR.status == 404) {
