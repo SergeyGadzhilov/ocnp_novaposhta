@@ -157,26 +157,57 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    private function sendRequest($request)
    {
+      $this->load->language(self::EXTENSION_PATH);
       $request["apiKey"] = $this->config->get('shipping_ocnp_novaposhta_api_key');
       if ($request["apiKey"])
       {
          $conection = curl_init();
 
-         curl_setopt($conection, CURLOPT_POST, 1);
-         curl_setopt($conection, CURLOPT_HEADER, 0);
-         curl_setopt($conection, CURLOPT_SSL_VERIFYPEER, 0);
-         curl_setopt($conection, CURLOPT_RETURNTRANSFER, 1);
-         curl_setopt($conection, CURLOPT_URL, $this->getApiUrl());
-         curl_setopt($conection, CURLOPT_HTTPHEADER, Array("Content-Type: text/plain"));
-         curl_setopt($conection, CURLOPT_POSTFIELDS, json_encode($request));
-
-         $response = json_decode(curl_exec($conection), TRUE);
-
-         curl_close($conection);
+         if ($conection)
+         {
+            curl_setopt($conection, CURLOPT_POST, 1);
+            curl_setopt($conection, CURLOPT_HEADER, 0);
+            curl_setopt($conection, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($conection, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($conection, CURLOPT_URL, $this->getApiUrl());
+            curl_setopt($conection, CURLOPT_HTTPHEADER, Array("Content-Type: text/plain"));
+            curl_setopt($conection, CURLOPT_POSTFIELDS, json_encode($request));
+   
+            $json = curl_exec($conection);
+            if ($json)
+            {
+               $data = json_decode($json, TRUE);
+               if ($data)
+               {
+                  $response = $data;
+               }
+               else
+               {
+                  $response = array(
+                     "success" => false,
+                     "errors" => array($this->language->get("error_curl_response_format"), $json)
+                  );
+               }
+            }
+            else
+            {
+               $response = array(
+                  "success" => false,
+                  "errors" => array($this->language->get("error_curl_exec"))
+               );
+            }
+            curl_close($conection);
+         }
+         else
+         {
+            $response = array(
+               "success" => false,
+               "errors" => array($this->language->get("error_curl_init"))
+            );
+         }
       }
       else
       {
-         $this->load->language(self::EXTENSION_PATH);
          $response = array(
             "success" => false,
             "errors" => array($this->language->get("error_api_key"))
