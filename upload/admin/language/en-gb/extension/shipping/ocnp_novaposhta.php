@@ -52,3 +52,6 @@ $_['entry_fixed_price'] = 'Fixed price';
 $_['error_permission']          = 'Warning: You do not have permission to modify attributes!';
 $_['text_error_api_url']    = 'The field "API URL" is required field!';
 $_['text_error_api_key']    = 'The field "API Key" is required field!';
+$_['error_curl_init']  = 'Error during curl_init. Check your curl server settings';
+$_['error_curl_exec']  = 'Error during curl_exec. Looks like your server doesn\'t allow outgoing requests';
+$_['error_curl_response_format'] = 'Response format error!';
