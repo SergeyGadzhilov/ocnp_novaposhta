@@ -50,9 +50,8 @@ $_['entry_fixed_price'] = 'Fixed price';
 $_['entry_free_delivery'] = 'Free delivery from';
 
 /* Errors */
-$_['error_permission']          = 'Warning: You do not have permission to modify attributes!';
-$_['text_error_api_url']    = 'The field "API URL" is required field!';
-$_['text_error_api_key']    = 'The field "API Key" is required field!';
-$_['error_curl_init']  = 'Error during curl_init. Check your curl server settings';
-$_['error_curl_exec']  = 'Error during curl_exec. Looks like your server doesn\'t allow outgoing requests';
-$_['error_curl_response_format'] = 'Response format error!';
+$_['error_permission'] = 'Warning: You do not have permission to modify attributes!';
+$_['text_error_api_url']  = 'The field "API URL" is required field!';
+$_['text_error_api_key']  = 'The field "API Key" is required field!';
+$_['ocnp_error_bad_request'] = 'Server received incorrect request!';
+$_['ocnp_error_add_data'] = 'Fail to add data into the db!';
