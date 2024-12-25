@@ -16,127 +16,188 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $this->model_extension_shipping_ocnp_novaposhta->install();
    }
 
+   public function saveSettings()
+   {
+      $request = $this->parseRequest();
+      $this->OCNPNovaPoshtaSettings->setSettings($request);
+      $this->OCNPNovaPoshtaSettings->saveSettings();
+      $response = array(
+         'success' => true,
+      );
+
+      $this->sendResponse($response);
+   }
+
    public function uninstall()
    {
       $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
       $this->model_extension_shipping_ocnp_novaposhta->uninstall();
    }
 
-   public function syncWarehouses()
+   public function addWarehouses()
    {
-      $this->OCNPNovaPoshtaSettings->setSettings($this->request->post);
-      $this->OCNPNovaPoshtaSettings->saveSettings();
-
       $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
-
-      $respose = array(
-         'success' => true,
-         'timestamp' => "",
+      $response = array(
+         'success' => false,
+         'timestamp' => 0,
          'count' => 0,
-         'message' => $this->language->get('ocnp_text_sync_success_warehouses')
+         'message' => ''
       );
 
-      $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
-      $model = $this->model_extension_shipping_ocnp_novaposhta;
-
-      $warehouses = $model->getWarehousesFromApi();
-      if ($warehouses["success"])
+      $request =  $this->parseRequest();
+      if (!is_array($request) || count($request) == 0)
       {
-         $model->clearWarehouses();
-         $model->addWarehouses($warehouses["data"]);
-         $model->updateWarehousesSync();
-      }
-      else{
-         $respose["success"] = false;
-         $respose["message"] = $warehouses["errors"][0];
+         $response['message'] = $this->language->get('ocnp_error_bad_request');
+         $this->sendResponse($response);
+         return;
       }
 
+      $model = $this->loadModel();
+      if (!$model->addWarehouses($request))
+      {
+         $response['message'] = $this->language->get('ocnp_error_add_data');
+         $this->sendResponse($response);
+         return;
+      }
+      $model->updateWarehousesSync();
       $WarehouseTable = $model->getWarehousesTableInfo();
-      $respose["timestamp"] = $WarehouseTable['Timestamp'];
-      $respose["count"] =  $WarehouseTable['RecordsCount'];
 
-      $this->response->addHeader('Content-Type: application/json');
-      $this->response->setOutput(json_encode($respose));
+      $response['success'] = true;
+      $response['timestamp'] = $WarehouseTable['Timestamp'];
+      $response['count'] = $WarehouseTable['RecordsCount'];
+      $response['message'] = $this->language->get('ocnp_text_sync_success_warehouses');
+
+      $this->sendResponse($response);
    }
 
-   public function syncAreas()
+   public function addAreas()
    {
-      $this->OCNPNovaPoshtaSettings->setSettings($this->request->post);
-      $this->OCNPNovaPoshtaSettings->saveSettings();
       $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
 
-      $respose = array(
-         'success' => true,
-         'timestamp' => "",
+      $request = $this->parseRequest();
+      $response = array(
+         'success' => false,
+         'timestamp' => 0,
          'count' => 0,
-         'message' => $this->language->get('ocnp_text_sync_success_areas')
+         'message' => ''
       );
 
-      $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
-
-      $areas = $this->model_extension_shipping_ocnp_novaposhta->getAreasFromApi();
-      if ($areas["success"])
+      if (!is_array($request) || count($request) == 0)
       {
-         $this->model_extension_shipping_ocnp_novaposhta->clearAreas();
-         foreach ($areas["data"] as $area) {
-            set_time_limit(30);
-            $this->model_extension_shipping_ocnp_novaposhta->addArea($area);
-         }
-         $this->model_extension_shipping_ocnp_novaposhta->updateAreasSync();
-      }
-      else{
-         $respose["success"] = false;
-         $respose["message"] = $areas["errors"][0];
+         $response['message'] = $this->language->get('ocnp_error_bad_request');
       }
 
-      $AreasTable = $this->model_extension_shipping_ocnp_novaposhta->getAreasTableInfo();
-      $respose["timestamp"] = $AreasTable['Timestamp'];
-      $respose["count"] =  $AreasTable['RecordsCount'];
+      $model = $this->loadModel();
+      if (!$model->addAreas($request))
+      {
+         $response['message'] = $this->language->get('ocnp_error_add_data');
+         $this->sendResponse($response);
+         return;
+      }
+      $model->updateAreasSync();
+      $AreasTable = $model->getAreasTableInfo();
 
-      $this->response->addHeader('Content-Type: application/json');
-      $this->response->setOutput(json_encode($respose));
+      $response['success'] = true;
+      $response['timestamp'] = $AreasTable['Timestamp'];
+      $response['count'] = $AreasTable['RecordsCount'];
+      $response['message'] = $this->language->get('ocnp_text_sync_success_areas');
+
+      $this->sendResponse($response);
    }
 
-   public function syncCities()
+   public function clearWarehouses()
    {
-      $this->OCNPNovaPoshtaSettings->setSettings($this->request->post);
-      $this->OCNPNovaPoshtaSettings->saveSettings();
-      $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
+      $model = $this->loadModel();
+      $model->clearWarehouses();
+      $model->updateWarehousesSync();
+      $info = $model->getWarehousesTableInfo();
 
-      $respose = array(
+      $response = array (
          'success' => true,
-         'timestamp' => "",
-         'count' => 0,
-         'message' => $this->language->get('ocnp_text_sync_success_cities')
+         'timestamp' => $info['Timestamp'],
+         'count' => $info["RecordsCount"],
+         'message' => ''
       );
 
-      $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
-      $model = $this->model_extension_shipping_ocnp_novaposhta;
+      $this->sendResponse($response);
+   }
 
-      $cities = $model->getCitiesFromApi();
-      if ($cities["success"])
+   public function clearAreas()
+   {
+      $model = $this->loadModel();
+      $model->clearAreas();
+      $model->updateAreasSync();
+      $info = $model->getAreasTableInfo();
+
+      $response = array (
+         'success' => true,
+         'timestamp' => $info['Timestamp'],
+         'count' => $info["RecordsCount"],
+         'message' => ''
+      );
+
+      $this->sendResponse($response);
+   }
+
+   public function clearCities()
+   {
+      $model = $this->loadModel();
+      $model->clearCities();
+      $model->updateCitiesSync();
+      $info = $model->getCitiesTableInfo();
+
+      $response = array (
+         'success' => true,
+         'timestamp' => $info['Timestamp'],
+         'count' => $info["RecordsCount"],
+         'message' => ''
+      );
+
+      $this->sendResponse($response);
+   }
+
+   public function addCities() {
+      $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
+
+      $response = array(
+         'success' => false,
+         'timestamp' => 0,
+         'count' => 0,
+         'message' => ""
+      );
+
+      $request = $this->parseRequest();
+
+      if (!is_array($request) || count($request) == 0)
       {
-         $model->clearCities();
-         $model->addCities($cities["data"]);
-         $model->updateCitiesSync();
-      }
-      else{
-         $respose["success"] = false;
-         $respose["message"] = $cities["errors"][0];
+         $response['message'] = $this->language->get('ocnp_error_bad_request');
+         $this->sendResponse($response);
+         return;
       }
 
+      $model = $this->loadModel();
+      if (!$model->addCities($request))
+      {
+         $response['message'] = $this->language->get('ocnp_error_add_data');
+         $this->sendResponse($response);
+         return;
+      }
+
+      $model->updateCitiesSync();
       $CitiesTable = $model->getCitiesTableInfo();
-      $respose["timestamp"] = $CitiesTable['Timestamp'];
-      $respose["count"] =  $CitiesTable['RecordsCount'];
 
-      $this->response->addHeader('Content-Type: application/json');
-      $this->response->setOutput(json_encode($respose));
+      $response['success'] = true;
+      $response['timestamp'] = $CitiesTable['Timestamp'];
+      $response['count'] = $CitiesTable['RecordsCount'];
+      $response['message'] = $this->language->get('ocnp_text_sync_success_cities');
+
+      $this->sendResponse($response);
    }
 
    private function loadResources()
    {
       $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
-      $this->document->addScript('view/javascript/ocnp/ocnp_novaposhta.js?19');
+      $this->document->addScript('view/javascript/ocnp/ocnp_novaposhta.js?47');
 
       $this->document->setTitle($this->language->get('heading_title'));
       $this->m_data['heading_title'] = $this->language->get('heading_title');
@@ -196,6 +257,23 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
          $this->m_data['footer'] = $this->load->controller('common/footer');
          $this->response->setOutput($this->load->view($this->OCNPNovaPoshtaSettings->get('extension_path'), $this->m_data));
       }
+   }
+
+   private function parseRequest()
+   {
+      return json_decode(file_get_contents( 'php://input' ), true);
+   }
+
+   private function loadModel()
+   {
+      $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
+      return $this->model_extension_shipping_ocnp_novaposhta;
+   }
+
+   private function sendResponse($response)
+   {
+      $this->response->addHeader('Content-Type: application/json');
+      $this->response->setOutput(json_encode($response));
    }
 
    private function setSyncTableInfo()

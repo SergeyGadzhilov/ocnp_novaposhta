@@ -6,45 +6,28 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    const SYNC_TABLE = 'ocnp_novaposhta_sync';
    const WAREHOUSES_TABLE = 'ocnp_novaposhta_warehouses';
 
-   public function getAreasFromApi()
-   {
-      $request = array(
-         "modelName" => "Address",
-         "calledMethod" => "getAreas"
-      );
+   public function addAreas($areas) {
+      if(!is_array($areas) || count($areas) == 0)
+      {
+         return false;
+      }
 
-      return $this->sendRequest($request);
-   }
+      $sql = "insert into ".DB_PREFIX.self::AREAS_TABLE."(Description, DescriptionRu, Ref, AreasCenter) values ";
+      for ($i = 0; $i < count($areas); ++$i)
+      {
+         if ($i > 0)
+         {
+            $sql .= ",";
+         }
 
-   public function getCitiesFromApi()
-   {
-      $request = array(
-         "modelName" => "Address",
-         "calledMethod" => "getCities"
-      );
-
-      return $this->sendRequest($request);
-   }
-
-   public function getWarehousesFromApi()
-   {
-      $request = array(
-         "modelName" => "AddressGeneral",
-         "calledMethod" => "getWarehouses"
-      );
-
-      return $this->sendRequest($request);
-   }
-
-   public function addArea($area)
-   {
-      $sql = "insert into ".DB_PREFIX.self::AREAS_TABLE."(Description, DescriptionRu, Ref, AreasCenter) values (";
-      $sql .= "'".$area['Description']."',";
-      $sql .= "'".$area['DescriptionRu']."',";
-      $sql .= "'".$area['Ref']."',";
-      $sql .= "'".$area['AreasCenter']."');";
-
-      $this->db->query($sql);
+         $sql .= "(";
+         $sql .= "'".$this->db->escape($areas[$i]['Description'])."',";
+         $sql .= "'".$this->db->escape($areas[$i]['DescriptionRu'])."',";
+         $sql .= "'".$this->db->escape($areas[$i]['Ref'])."',";
+         $sql .= "'".$this->db->escape($areas[$i]['AreasCenter'])."')";
+      }
+      $sql .= ";";
+      return $this->db->query($sql);
    }
 
    public function clearAreas()
@@ -59,6 +42,11 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function addWarehouses($warehouses)
    {
+      if(!is_array($warehouses) || count($warehouses) == 0)
+      {
+         return false;
+      }
+
       $sql = "insert into ".DB_PREFIX.self::WAREHOUSES_TABLE."( ";
       $sql .= "SiteKey, Description, DescriptionRu, Ref, Phone, TypeOfWarehouse, ";
       $sql .= "Number, CityRef, TotalMaxWeightAllowed, PlaceMaxWeightAllowed) values ";
@@ -84,7 +72,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       }
       $sql .= ";";
 
-      $this->db->query($sql);
+      return $this->db->query($sql);
    }
 
    public function clearWarehouses()
@@ -105,7 +93,12 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    public function addCities($cities)
    {
-      $sql = "insert into ".DB_PREFIX.self::CITIES_TABLE."(Description, DescriptionRu, Ref, Area, CityID) values";
+      if(!is_array($cities) || count($cities) == 0)
+      {
+         return false;
+      }
+
+      $sql = "insert into ".DB_PREFIX.self::CITIES_TABLE."(Description, DescriptionRu, Ref, Area, CityID) values ";
 
       for($i = 0; $i < count($cities); ++$i)
       {
@@ -140,69 +133,6 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
    {
       $query = $this->db->query("select count(*) records_count from ".DB_PREFIX.$TableName.";");
       return $query->row['records_count'];
-   }
-
-   private function sendRequest($request)
-   {
-      $this->load->library('ocnp/novaposhta/OCNPNovaPoshtaSettings');
-      $this->load->language($this->OCNPNovaPoshtaSettings->get('extension_path'));
-      $request["apiKey"] = $this->OCNPNovaPoshtaSettings->get('api_key');
-      if ($request["apiKey"])
-      {
-         $conection = curl_init();
-
-         if ($conection)
-         {
-            curl_setopt($conection, CURLOPT_POST, 1);
-            curl_setopt($conection, CURLOPT_HEADER, 0);
-            curl_setopt($conection, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($conection, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($conection, CURLOPT_URL, $this->OCNPNovaPoshtaSettings->get('api_url'));
-            curl_setopt($conection, CURLOPT_HTTPHEADER, Array("Content-Type: text/plain"));
-            curl_setopt($conection, CURLOPT_POSTFIELDS, json_encode($request));
-   
-            $json = curl_exec($conection);
-            if ($json)
-            {
-               $data = json_decode($json, TRUE);
-               if ($data)
-               {
-                  $response = $data;
-               }
-               else
-               {
-                  $response = array(
-                     "success" => false,
-                     "errors" => array($this->language->get("error_curl_response_format"), $json)
-                  );
-               }
-            }
-            else
-            {
-               $response = array(
-                  "success" => false,
-                  "errors" => array($this->language->get("error_curl_exec"))
-               );
-            }
-            curl_close($conection);
-         }
-         else
-         {
-            $response = array(
-               "success" => false,
-               "errors" => array($this->language->get("error_curl_init"))
-            );
-         }
-      }
-      else
-      {
-         $response = array(
-            "success" => false,
-            "errors" => array($this->language->get("text_error_api_key"))
-         );
-      }
-
-      return $response;
    }
 
    public function getCitiesTableInfo()

@@ -1,3 +1,140 @@
+const SYNC_ACTIONS = {
+   CITIES: 'syncCities',
+   AREAS: 'syncAreas',
+   WAREHOUSES: `syncWarehouses`
+}
+class DataIterator{
+   constructor(params) {
+      this._total = 0;
+      this._data = null;
+      this._loaded = -1;
+      this._server = params.server;
+      this._request = params.request;
+   }
+
+   async next() {
+      if (this.hasNext()) {
+         if (this._loaded == -1) {
+            this._loaded = 0;
+         }
+         else {
+            this._request.methodProperties.Page++;
+         }
+         return this.sendRequest(this._request);
+      }
+      return {success: false, message: 'no more items'};
+   }
+
+   async sendRequest(request) {
+      const response = await this._server.sendRequest(request);
+      if (response == null) {
+         return { 
+            success: false,
+            message: `response for request ${JSON.stringify(request)} is null`
+         }
+      }
+
+      const payload = await response.json();
+      if (payload == null || !payload.success) {
+         return {
+            success: false,
+            message: `request ${JSON.stringify(request)} failed with response ${JSON.stringify(payload)}`
+         }
+      }
+
+      this._total = payload.info.totalCount;
+      this._data = payload.data;
+      this._loaded += payload.data.length;
+
+      return { success: true, data: this._data };
+   }
+
+   get data() {
+      return this._data;
+   }
+
+   get page() {
+      return this._request.methodProperties.Page;
+   }
+
+   get limit() {
+      return this._request.methodProperties.Limit;
+   }
+
+   hasNext() {
+      return this._loaded == -1 || this._total > this._loaded;
+   }
+}
+
+class OCNP_NovaPoshta{
+   constructor(params) {
+      this._url = params.api_url;
+      this._key = params.api_key;
+   }
+
+   async getCities() {
+      return new DataIterator({
+         server: this,
+         request: {
+            apiKey: this._key,
+            modelName: "Address",
+            calledMethod: "getCities",
+            methodProperties: {
+               Page: 1,
+               Limit: 500
+            }
+         }
+      });
+   }
+
+   async getAreas() {
+      return new DataIterator({
+         server: this,
+         request: {
+            apiKey: this._key,
+            modelName: "Address",
+            calledMethod: "getAreas",
+            methodProperties: {
+               Page: 1,
+               Limit: 150
+            }
+         }
+      });
+   }
+
+   async getWarehouses() {
+      return new DataIterator({
+         server: this,
+         request: {
+            apiKey: this._key,
+            modelName: "AddressGeneral",
+            calledMethod: "getWarehouses",
+            methodProperties: {
+               Page: 1,
+               Limit: 1000
+            }
+         }
+      });
+   }
+
+   async sendRequest(request) {
+      if (request == null) {
+         return {success: false, message: 'request is null'};
+      }
+
+      await this.waitForTimeout(2000);
+
+      return fetch(this._url, {
+         method: "POST",
+         body: JSON.stringify(request)
+      });
+   }
+
+   async waitForTimeout(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+   }
+}
+
 function OCNP_UserMessage(parent){
 
    this.success = function(message){
@@ -37,81 +174,86 @@ function OCNP_UserMessage(parent){
    }
 }
 
-function OCNP_Request(name, data){
-   var m_token = 'user_token='+ getURLVar('user_token');
-   var m_route = 'route=extension/shipping/ocnp_novaposhta/' + name;
-   var m_data = data;
+class OCNP_Request {
+   constructor(name, data) {
+      this._name = name;
+      this._data = data; 
+   } 
 
-   this.getURL = function(){
-      return ('index.php?' + m_route + '&' + m_token);
+   get url() {
+      const token = 'user_token='+ getURLVar('user_token');
+      const route = 'route=extension/shipping/ocnp_novaposhta/' + this._name;
+      return ('index.php?' + route + '&' + token);
    }
 
-   this.getData = function(){
-      return m_data;
+   get data() {
+      return JSON.stringify(this._data);
    }
 }
 
-function OCNP_Server(){
-   var m_console = new OCNP_UserMessage(document.getElementsByClassName('panel-body')[0]);
-
-   this.sendRequest = function(request, callback){
-      $.ajax({
-         url: request.getURL(),
-         type: "POST",
-         dataType: 'json',
-         data: request.getData(),
-         success: function(response){
-            showServerMessage(response);
-            processResponse(response, callback);
-         },
-         error: function(jqXHR, exception){
-            if (callback.error){
-               callback.error(null);
-            }
-            processComunicationError(jqXHR, exception);
-         }
-      });
+class OCNP_Server {
+   async clearCities() {
+      return this.sendRequest(new OCNP_Request("clearCities", {}));
    }
 
-   function processComunicationError(jqXHR, exception){
-      if (jqXHR.status === 0) {
-         m_console.error('Server connection error.\n Please, verify network connection.');
-      } else if (jqXHR.status == 404) {
-         m_console.error('Requested page not found. [404]');
-      } else if (jqXHR.status == 500) {
-         m_console.error('Internal Server Error [500].');
-      } else if (exception === 'parsererror') {
-         m_console.error('Requested JSON parse failed.');
-      } else if (exception === 'timeout') {
-         m_console.error('Time out error.');
-      } else if (exception === 'abort') {
-         m_console.error('Ajax request aborted.');
-      } else {
-         m_console.error('Uncaught Error.\n' + jqXHR.responseText);
-      }
+   async saveSettings(settings) {
+      return this.sendRequest(new OCNP_Request("saveSettings", {
+         api_key: settings.api_key,
+         api_url: settings.api_url
+      }));
    }
 
-   function processResponse(response, callback){
-      if (response.success){
-         if (callback.success){
-            callback.success(response);
-         }
+   async addCities(cities) {
+      if (cities == null) {
+         return {success: false, message: "cities is null"};
       }
-      else{
-         if (callback.error){
-            callback.error(response);
-         }
-      }
+      return this.sendRequest(new OCNP_Request("addCities", cities));
    }
 
-   function showServerMessage(response){
-      if (response.message){
-         if (response.success){
-            m_console.success(response.message);
+   async clearAreas() {
+      return this.sendRequest(new OCNP_Request("clearAreas", {}));
+   }
+
+   async addAreas(areas) {
+      if (areas == null) {
+         return {success: false, message: "areas is null"};
+      }
+      return this.sendRequest(new OCNP_Request("addAreas", areas));
+   }
+
+   async clearWarehouses() {
+      return this.sendRequest(new OCNP_Request("clearWarehouses", {}));
+   }
+
+   async addWarehouses(warehouses) {
+      if (warehouses == null) {
+         return {success: false, message: "warehouses is null"};
+      }
+      return this.sendRequest(new OCNP_Request("addWarehouses", warehouses));
+   }
+
+   async sendRequest(request) {
+      if (request == null) {
+         return {success: false, message: "request is null"};
+      }
+
+      try {
+         const response = await fetch(request.url, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: request.data
+         });
+   
+         if (response == null) {
+            return {success: false, message: `response is null for the request ${JSON.stringify(request)}`};
          }
-         else{
-            m_console.error(response.message);
-         }
+
+         return await response.json();
+      }
+      catch (err) {
+         return { success: false, message: `request failed: ${err.message}`};
       }
    }
 }
@@ -145,31 +287,141 @@ function OCNP_SyncItem(id){
    }
 }
 
-function OCNP_ApiSettings(){
-   var m_key = document.querySelector('.ocnp_api_settings__key');
+class OCNP_ApiSettings {
+   constructor() {
+      this._key = document.querySelector('.ocnp_api_settings__key');
+      this._url = document.querySelector('.ocnp_api_settings__url');
+   }
 
-   this.getKey = function(){
-      var setting = {};
-      setting[m_key.name] = m_key.value;
-      return setting;
+   get api_key() {
+      return this._key.value;
+   }
+
+   get api_url() {
+      return this._url.value;
    }
 }
 
+async function SyncCities(params) {
+   var response = await params.server.clearCities();
+   if (!response?.success) {
+      return response;
+   }
 
-function syncItem(id){
-   var apiSettings = new OCNP_ApiSettings();
-   var server = new OCNP_Server();
+   params.item.setCount(response.count);
+
+   const cities = await params.novaposhta.getCities();
+   while (cities.hasNext()) {
+      response = await cities.next();
+      if (!response?.success) {
+         return response;
+      }
+
+      response = await params.server.addCities(response.data);
+      if (!response?.success) {
+         return response;
+      }
+
+      params.item.setCount(response.count);
+   }
+
+   return response;
+}
+
+async function SyncAreas(params) {
+   var response = await params.server.clearAreas();
+   if (!response?.success) {
+      return response;
+   }
+   params.item.setCount(response.count);
+
+   const areas = await params.novaposhta.getAreas();
+   while (areas.hasNext()) {
+      response = await areas.next();
+      if (!response?.success) {
+         return response;
+      }
+
+      response = await params.server.addAreas(response.data);
+      if (!response.success) {
+         return response;
+      }
+
+      params.item.setCount(response.count);
+   }
+
+   return response;
+}
+
+async function SyncWarehouses(params) {
+   var response = await params.server.clearWarehouses();
+   if (!response.success) {
+      return response;
+   }
+   params.item.setCount(response.count);
+
+   const warehouses = await params.novaposhta.getWarehouses();
+   while (warehouses.hasNext()) {
+      response = await warehouses.next();
+      if (!response?.success) {
+         return response;
+      }
+
+      response = await params.server.addWarehouses(response.data);
+      if (!response.success) {
+         return response;
+      }
+      params.item.setCount(response.count);
+   }
+
+   return response;
+}
+
+async function syncItem(id){
+   const server = new OCNP_Server();
+   const apiSettings = new OCNP_ApiSettings();
+   const novaposhta = new OCNP_NovaPoshta(apiSettings);
+   const uimessage = new OCNP_UserMessage(document.getElementsByClassName('panel-body')[0]);
    var item = new OCNP_SyncItem(id);
-   item.startSync();
 
-   server.sendRequest(new OCNP_Request(id, apiSettings.getKey()), {
-      "success" : function(response){
+   try {
+      item.startSync();
+
+      var response = await server.saveSettings(apiSettings);
+      if (!response?.success) {
+         uimessage.error(`fail to save settings: ${response.message}`);
+         item.endSync();
+         return;
+      }
+
+      switch(id) {
+         case SYNC_ACTIONS.CITIES:
+            response = await SyncCities({server, novaposhta, item});
+            break;
+         case SYNC_ACTIONS.AREAS:
+            response = await SyncAreas({server, novaposhta, item});
+            break;
+         case SYNC_ACTIONS.WAREHOUSES:
+            response = await SyncWarehouses({server, novaposhta, item});
+            break;
+         default:
+            uimessage.error(`unknown sync action ${id}`);
+            return;
+      }
+   
+      if (response?.success) {
          item.setTimestamp(response.timestamp);
          item.setCount(response.count);
-         item.endSync();
-      },
-      "error" : function(response){
-         item.endSync();
+         uimessage.success(response.message);
       }
-   });
+      else {
+         uimessage.error(`synchronization failed: ${response.message}`);
+      }
+   }
+   catch(err)
+   {
+      uimessage.error(`synchronization failed with exception: ${err.message}`);
+   }
+
+   item.endSync();
 }

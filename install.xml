@@ -3,7 +3,7 @@
     <code>OCNPNOVAPOSHTA1.0</code>
     <name>OCNP Nova Poshta</name>
     <version>1.0</version>
-    <author>gadzhilov.sergey@gmail.com</author>
+    <author>ocnp_novaposhta@gmail.com</author>
     <file path="catalog/view/theme/*/template/checkout/shipping_method.twig">
         <operation>
             <search><![CDATA[
