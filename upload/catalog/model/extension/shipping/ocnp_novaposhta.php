@@ -1,20 +1,5 @@
 <?php
 
-class OCNPNovaPoshtaForm
-{
-   private $m_form;
-
-   public function __construct($form)
-   {
-      $this->m_form = json_encode($form);
-   }
-
-    public function show()
-    {
-      return json_decode($this->m_form);
-    }
-}
-
 class ModelExtensionShippingOcnpNovaposhta extends Model {
 
    const MODULE_NAME = 'shipping_ocnp_novaposhta';
@@ -47,8 +32,7 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
                'title' => $title[$this->config->get('config_language_id')],
                'cost' => $this->getCost(),
                'tax_class_id' => 0,
-               'text' => $this->currency->format($this->getCost(), $this->session->data['currency']),
-               'form' => $this->getForm()
+               'text' => $this->currency->format($this->getCost(), $this->session->data['currency'])
             )
          );
       }
@@ -69,10 +53,10 @@ class ModelExtensionShippingOcnpNovaposhta extends Model {
       return $cost;
    }
 
-   private function getForm()
+   public function getForm()
    {
       $data = array('areas' => $this->getAreas());
-      return new OCNPNovaPoshtaForm($this->load->view(self::MODULE_PATH, $data));
+      return $this->load->view(self::MODULE_PATH, $data);
    }
 
    public function getCitiesByAreaID($area)

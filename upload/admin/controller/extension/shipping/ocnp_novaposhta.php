@@ -14,6 +14,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    {
       $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
       $this->model_extension_shipping_ocnp_novaposhta->install();
+      $this->installEvents();
    }
 
    public function saveSettings()
@@ -32,6 +33,7 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
    {
       $this->load->model($this->OCNPNovaPoshtaSettings->get('extension_path'));
       $this->model_extension_shipping_ocnp_novaposhta->uninstall();
+      $this->uninstallEvents();
    }
 
    public function addWarehouses()
@@ -192,6 +194,42 @@ class ControllerExtensionShippingOcnpNovaposhta extends Controller
       $response['message'] = $this->language->get('ocnp_text_sync_success_cities');
 
       $this->sendResponse($response);
+   }
+
+   private function installEvents() {
+      $this->load->model('setting/event');
+
+      $this->model_setting_event->addEvent(
+         'ocnp_novaposhta_add_scripts',
+         'catalog/controller/common/header/before',
+         'extension/shipping/ocnp_novaposhta/addScripts'
+      );
+
+      $this->model_setting_event->addEvent(
+         'ocnp_novaposhta_checkout_form',
+         'catalog/view/checkout/shipping_method/after',
+         'extension/shipping/ocnp_novaposhta/addNovaPoshtaForm'
+      );
+
+      $this->model_setting_event->addEvent(
+         'ocnp_novaposhta_checkout_script',
+         'catalog/view/checkout/checkout/after',
+         'extension/shipping/ocnp_novaposhta/addNovaPoshtaCheckoutScript'
+      );
+
+      $this->model_setting_event->addEvent(
+         'ocnp_novaposhta_checkout_save_address',
+         'catalog/controller/checkout/shipping_method/save/before',
+         'extension/shipping/ocnp_novaposhta/addNovaPoshtaSaveAddress'
+      );
+   }
+
+   private function uninstallEvents() {
+      $this->load->model('setting/event');
+      $this->model_setting_event->deleteEventByCode("ocnp_novaposhta_add_scripts");
+      $this->model_setting_event->deleteEventByCode("ocnp_novaposhta_checkout_form");
+      $this->model_setting_event->deleteEventByCode("ocnp_novaposhta_checkout_script");
+      $this->model_setting_event->deleteEventByCode("ocnp_novaposhta_checkout_save_address");
    }
 
    private function loadResources()
