@@ -4,10 +4,9 @@ OpenCart extension for integration with delivery Nova Poshta
 ## Installation
 1. Got to "Extensions -> Install"  and click “Upload”.
 2. Select downloaded extension ocnp_novaposhta.ocmod.zip
-3. Go to "Extensions -> Modifications"  and click on “Refresh”.
-4. Go to "Extensions -> Extensions" and select type "Shipping"
+3. Go to "Extensions -> Extensions" and select type "Shipping"
 5. Find "Delivery Nova Poshta" and click install.
-
+ 
 ## Setup
 1. Open “Delivery Nova Poshta” for modification
 2. Go to API tab and enter your API key
