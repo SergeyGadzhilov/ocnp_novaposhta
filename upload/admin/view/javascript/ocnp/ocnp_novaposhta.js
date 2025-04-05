@@ -12,13 +12,28 @@ class DataIterator{
       this._request = params.request;
    }
 
+   getNextPage() {
+      try {
+         var page = parseInt(this._request.methodProperties.Page);
+         page = page + 1;
+         return `${page}`;
+      }
+      catch(err) {
+         console.error(`fail to get next page: ${err}`);
+         return null;
+      }
+   }
+
    async next() {
       if (this.hasNext()) {
          if (this._loaded == -1) {
             this._loaded = 0;
          }
          else {
-            this._request.methodProperties.Page++;
+            this._request.methodProperties.Page = this.getNextPage();
+            if (!this._request.methodProperties.Page) {
+               return {success: false, message: "fail to get next page"};
+            }
          }
          return this.sendRequest(this._request);
       }
@@ -77,10 +92,10 @@ class OCNP_NovaPoshta{
          server: this,
          request: {
             apiKey: this._key,
-            modelName: "Address",
+            modelName: "AddressGeneral",
             calledMethod: "getCities",
             methodProperties: {
-               Page: 1,
+               Page: "1",
                Limit: 500
             }
          }
@@ -92,10 +107,10 @@ class OCNP_NovaPoshta{
          server: this,
          request: {
             apiKey: this._key,
-            modelName: "Address",
+            modelName: "AddressGeneral",
             calledMethod: "getAreas",
             methodProperties: {
-               Page: 1,
+               Page: "1",
                Limit: 150
             }
          }
@@ -110,7 +125,7 @@ class OCNP_NovaPoshta{
             modelName: "AddressGeneral",
             calledMethod: "getWarehouses",
             methodProperties: {
-               Page: 1,
+               Page: "1",
                Limit: 1000
             }
          }
